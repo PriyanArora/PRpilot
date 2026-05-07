@@ -1,0 +1,26 @@
+{
+  "name": "prpilot",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "author": "Priyan Arora",
+  "type": "commonjs",
+  "scripts": {
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "webhook:dev": "node apps/webhook/dev-server.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.0",
+    "likit-codex": "^1.0.4",
+    "typescript": "^6.0.2",
+    "vitest": "^4.0.13"
+  }
+}

@@ -1,0 +1,49 @@
+{
+    "selected_repository_ids": [1147613528],
+    "allowed_webhook": {
+        "delivery_id": "allowed-delivery-id-1",
+        "event": "pull_request",
+        "action": "opened",
+        "repository": {
+        "id": 1147613528,
+        "full_name": "PriyanArora/To-Do"
+        },
+        "installation": {
+        "id": 128297219
+        },
+        "pull_request": {
+        "number": 7,
+        "head": {
+            "sha": "abc123",
+            "ref": "new-branch"
+        },
+        "base": {
+            "sha": "def456",
+            "ref": "main"
+        }
+        }
+    },
+    "rejected_webhook": {
+      "delivery_id": "rejected-delivery-id-1",
+      "event": "pull_request",
+      "action": "opened",
+      "repository": {
+        "id": 999999999,
+        "full_name": "SomeoneElse/OtherRepo"
+      },
+      "installation": {
+        "id": 128297219
+      },
+      "pull_request": {
+        "number": 1,
+        "head": {
+          "sha": "bad123",
+          "ref": "feature"
+        },
+        "base": {
+          "sha": "bad456",
+          "ref": "main"
+        }
+      }
+    }
+}

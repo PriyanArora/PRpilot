@@ -1,0 +1,32 @@
+[
+    {
+        "delivery_id": "duplicate-delivery-id-1",
+        "event": "pull_request",
+        "action": "opened",
+        "repository": {
+            "id": 123,
+            "full_name": "PriyanArora/To-Do"
+        },
+        "pull_request": {
+            "number": 1,
+            "head": {
+                "sha": "abc123"
+            }
+        }
+    },
+    {
+        "delivery_id": "duplicate-delivery-id-1",
+        "event": "pull_request",
+        "action": "opened",
+        "repository": {
+            "id": 123,
+            "full_name": "PriyanArora/To-Do"
+        },
+        "pull_request": {
+            "number": 1,
+            "head": {
+                "sha": "abc123"
+            }
+        }
+    }
+]

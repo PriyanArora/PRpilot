@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+cdk.out/
+*.log
+tmp/
+.tmp/
+.DS_Store
+.idea/
+.vscode/
+codex-folder/
+.codex
