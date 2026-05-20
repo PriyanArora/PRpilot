@@ -18,8 +18,10 @@ export function evaluateLargeChange(changedFiles: ChangedFile[]): LargeChangeRul
         if(changedLines > LARGE_CHANGE_THRESHOLD) {
             findings.push({
                 lane: "fast",
-                source: "internal",
-                ruleId: "internal.large-change",
+                pack: "internal",
+                scanner: "internal",
+                rule_id: "internal.large-change",
+                scope_basis: "changed_files",
                 severity: "medium",
                 blockability: "warn",
                 message: `Large file change: ${changedLines} changed lines`,
@@ -33,14 +35,13 @@ export function evaluateLargeChange(changedFiles: ChangedFile[]): LargeChangeRul
         findings,
         coverage: {
             lane: "fast",
-            source: "internal",
-            ruleId: "internal.large-change",
+            scanner: "internal",
             applicability: "applicable",
             status: "completed",
-            scopeExpected: "changed files",
-            scopeCompleted: "changed files",
-            durationMs: 0,
-            budgetMs: 0
+            scope_expected: "changed_files",
+            scope_completed: "changed_files",
+            duration_ms: 0,
+            budget_ms: 0
         }
     };
 }

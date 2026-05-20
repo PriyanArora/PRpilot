@@ -28,10 +28,12 @@ export function evaluateSensitiveFileChange(changedFiles: ChangedFile[]): Sensit
 
             findings.push({
                 lane: "fast",
-                source: "internal",
-                ruleId: "internal.sensitive-file-change",
+                pack: "internal",
+                scanner: "internal",
+                rule_id: "internal.sensitive-file-change",
                 severity: "medium",
-                blockability: "warn",
+                blockability: "block",
+                scope_basis: "changed_files",
                 message: "A sensitive file changed",
                 path: changedFile.path,
                 fingerprint: `internal.sensitive-file-change:${changedFile.path}`
@@ -43,14 +45,13 @@ export function evaluateSensitiveFileChange(changedFiles: ChangedFile[]): Sensit
         findings,
         coverage: {
             lane: "fast",
-            source: "internal",
-            ruleId: "internal.sensitive-file-change",
+            scanner: "internal",
             applicability: "applicable",
             status: "completed",
-            scopeExpected: "changed files",
-            scopeCompleted: "changed files",
-            durationMs: 0,
-            budgetMs: 0
+            scope_expected: "changed_files",
+            scope_completed: "changed_files",
+            duration_ms: 0,
+            budget_ms: 0
         }
     };
 }

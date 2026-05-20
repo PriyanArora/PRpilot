@@ -16,10 +16,12 @@ export function evaluateLockfileDrift(changedFiles: ChangedFile[]): LockfileDrif
     if (packageJsonChanged && !lockfileChanged) {
         findings.push({
             lane: "fast",
-            source: "internal",
-            ruleId: "internal.lockfile-drift",
+            pack: "internal",
+            scanner: "internal",
+            rule_id: "internal.lockfile-drift",
             severity: "medium",
-            blockability: "warn",
+            blockability: "block",
+            scope_basis: "changed_files",
             message: "A lockfile drifted",
             path: "package.json",
             fingerprint: "internal.lockfile-drift:package.json"
@@ -30,17 +32,14 @@ export function evaluateLockfileDrift(changedFiles: ChangedFile[]): LockfileDrif
         findings,
         coverage: {
             lane: "fast",
-            source: "internal",
-            ruleId: "internal.lockfile-drift",
+            scanner: "internal",
             applicability: "applicable",
             status: "completed",
-            scopeExpected: "changed files",
-            scopeCompleted: "changed files",
-            durationMs: 0,
-            budgetMs: 0
+            scope_expected: "changed_files",
+            scope_completed: "changed_files",
+            duration_ms: 0,
+            budget_ms: 0
         }
     };
 }
-
-
 

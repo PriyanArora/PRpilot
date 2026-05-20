@@ -2,17 +2,20 @@ import type {Lane} from "../config/runtime-policy";
 
 export type FindingSeverity = "low" | "medium" | "high" | "critical";
 
-export type FindingBlockability = "warn" | "block";
+export type FindingBlockability = "warn" | "block" | "report_only";
 
 export type Finding = {
     lane: Lane;
-    source: string; //tool/rule name, like internal or eslint
-    ruleId: string; //exact rule, like internal.large-change
+    pack: string;
+    scanner: string;
+    rule_id: string; //exact rule, like internal.large-change
     severity: FindingSeverity;
-    blockability: FindingBlockability; //warn-only or merge-blocking
-    message: string; //what user sees
-    path: string; //file path
-    startLine?: number; //optional line location
-    endLine?: number;
-    fingerprint: string; //stable ID for dedupe later.  If the same scanner reports the same issue twice, fingerprint helps us keep one copy.
+    blockability: FindingBlockability;//warn-only or merge-blocking
+    scope_basis: string;
+    path: string;//file path
+    start_line?: number;//optional line location
+    end_line?: number;
+    message: string;//what user sees
+    fingerprint: string;//stable ID for dedupe later.  If the same scanner reports the same issue twice, fingerprint helps us keep one copy.
+    raw_reference?: string;
 };
