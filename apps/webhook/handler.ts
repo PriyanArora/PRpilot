@@ -1,4 +1,7 @@
 import {createHmac} from "node:crypto";
+import { buildReviewJob, type ReviewJob, type ReviewJobTrigger } from "../../packages/queue/review-job";
+import type { DurableReviewQueue, ReviewQueueSendResult } from "../../packages/queue/review-queue";
+import type { Lane } from "../../packages/config/runtime-policy";
 
 //checking signature (incoming webhook request which has rawbody and secret -> Sha256'ed to create signature), checking it with our secret and rawbody to confirm that the request is from github and not from some malicious source
 const verifyWebhookSignature = (rawBody: string, signature: string, secret: string): boolean => {
@@ -25,6 +28,7 @@ export type NormalizedWebhookEvent = {
     repositoryFullName: string;
     installationId: number;
     receivedAt: string;
+    requestedActionId?: string;
     //pull request is optional as not every event is pull_request, can get installation event for eg which doesn't have pull request details
     pullRequest?: {
         //pr number 
@@ -38,6 +42,13 @@ export type NormalizedWebhookEvent = {
         //branch name of target branch of pr we are merging into . eg main
         baseRef: string;
     };
+};
+
+export type WebhookQueueHandoffResult = {
+    statusCode: 202;
+    acknowledged: true;
+    job: ReviewJob;
+    queueResult: ReviewQueueSendResult;
 };
 
 // RECEIVED: webhook arrived, but may not have reached the queue yet, ENQUEUED: webhook was safely handed off for processing, FAILED: something went wrong
@@ -68,5 +79,62 @@ const hasDeliveryBeenSeen = async(deliveryId: string, store: DeliveryStore): Pro
     const existingDelivery = await store.getDelivery(deliveryId);
     return existingDelivery !== null;
 };
+
+export function buildReviewJobFromNormalizedEvent(
+    event: NormalizedWebhookEvent,
+    lane: Lane,
+    trigger: ReviewJobTrigger,
+    now = new Date()
+): ReviewJob | null {
+    if (event.pullRequest === undefined) {
+        return null;
+    }
+
+    return buildReviewJob({
+        deliveryId: event.deliveryId,
+        lane,
+        trigger,
+        repositoryId: event.repositoryId,
+        repositoryFullName: event.repositoryFullName,
+        installationId: event.installationId,
+        prNumber: event.pullRequest.number,
+        headSha: event.pullRequest.headSha,
+        baseSha: event.pullRequest.baseSha,
+        enqueuedAt: now.toISOString(),
+        requestedActionId: event.requestedActionId
+    });
+}
+
+export async function enqueueReviewJobFromWebhook(input: {
+    event: NormalizedWebhookEvent;
+    lane: Lane;
+    trigger: ReviewJobTrigger;
+    queue: DurableReviewQueue;
+    now?: Date;
+}): Promise<WebhookQueueHandoffResult | { statusCode: 204; acknowledged: false; reason: "not_review_event" }> {
+    const now = input.now ?? new Date();
+    const job = buildReviewJobFromNormalizedEvent(input.event, input.lane, input.trigger, now);
+
+    if (job === null) {
+        return {
+            statusCode: 204,
+            acknowledged: false,
+            reason: "not_review_event"
+        };
+    }
+
+    try {
+        const queueResult = await input.queue.send(job, now);
+
+        return {
+            statusCode: 202,
+            acknowledged: true,
+            job,
+            queueResult
+        };
+    } catch (error) {
+        throw new Error("Failed to hand off review job to durable queue", { cause: error });
+    }
+}
 
 export {verifyWebhookSignature, isRepositoryAllowed, hasDeliveryBeenSeen};
