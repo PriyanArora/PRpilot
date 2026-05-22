@@ -1,6 +1,8 @@
 # PRPilot
 
-PRPilot is a self-hosted GitHub App that reviews pull requests before a human reviewer spends time on avoidable issues. The MVP is built for students and early-career developers who want fast, structured PR feedback inside GitHub, without turning the project into a SaaS or depending on paid AI tools.
+This repository has been restored from a previously deleted repo to start fresh with a cleaner foundation. Prior development history is not reflected in the commit log
+
+PRPilot is a self-hosted GitHub App that reviews pull requests before a human reviewer spends time on avoidable issues. The MVP is built for students and early-career developers who want fast, structured PR feedback inside GitHub, without turning the project into a SaaS or depending on paid AI tools. 
 
 The main idea is simple. A private GitHub App receives pull request events, verifies that the request is real, checks whether the repository is allowed, deduplicates repeated deliveries, queues the work, runs deterministic review checks, and publishes a GitHub Check Run back to the pull request.
 
