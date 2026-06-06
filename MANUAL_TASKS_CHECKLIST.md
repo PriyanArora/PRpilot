@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, and P16
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, and P17
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, P14, P15, and P16 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, live observability evidence, live deployment validation evidence, and live demo/incident evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, P14, P15, P16, and P17 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, live observability evidence, live deployment validation evidence, live demo/incident evidence, and live workflow evidence remains manual.
 
 ---
 
@@ -219,6 +219,25 @@
 - [ ] P16.M5 Show recovery-drill or DLQ-replay evidence used during rehearsal.
 
 **Proof:** Demo recording or notes, GitHub PR evidence, runbook rehearsal notes, incident timeline, and recovery or DLQ evidence.
+
+---
+
+## P17 — CI/CD `[manual proof pending]`
+
+**Goal:** Prove GitHub Actions validation, OIDC deployment, and CI guards in live workflow runs.
+
+**Tasks:**
+- [ ] P17.M1 Configure repository variables `AWS_ROLE_TO_ASSUME` and `AWS_REGION`.
+- [ ] P17.M2 Create or verify the AWS IAM role trusted by GitHub OIDC.
+- [ ] P17.M3 Show one passing PR workflow run.
+- [ ] P17.M4 Show one failing PR workflow run.
+- [ ] P17.M5 Show one OIDC-based deploy workflow run.
+- [ ] P17.M6 Show latency regression guard behavior.
+- [ ] P17.M7 Show scanner-policy drift guard behavior.
+- [ ] P17.M8 Show deterministic required-path guard behavior.
+- [ ] P17.M9 Confirm GitHub Actions usage stays within free limits or document the self-hosted runner move.
+
+**Proof:** GitHub Actions logs, AWS OIDC role assumption evidence, guard pass/fail logs, and CI usage evidence.
 
 ---
 

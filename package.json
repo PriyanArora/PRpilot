@@ -18,7 +18,10 @@
     "proof:p5:failure": "node scripts/publish-p5-failure-check.mjs",
     "preflight": "node apps/cli/preflight.mjs",
     "infra:synth": "cdk synth",
-    "deploy:validate-config": "node scripts/validate-live-config.mjs"
+    "deploy:validate-config": "node scripts/validate-live-config.mjs",
+    "ci:latency": "node scripts/check-latency-baseline.mjs",
+    "ci:scanner-drift": "node scripts/check-scanner-policy-drift.mjs",
+    "ci:deterministic": "node scripts/check-required-path-deterministic.mjs"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",

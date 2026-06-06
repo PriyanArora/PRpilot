@@ -1,0 +1,9 @@
+{
+  "metric": "webhook_to_check_latency_ms",
+  "baselineP50Ms": 10000,
+  "baselineP95Ms": 120000,
+  "currentP50Ms": 9000,
+  "currentP95Ms": 100000,
+  "tolerancePercent": 20,
+  "notes": "Replace current values with live P14 measurements before enforcing against production data."
+}

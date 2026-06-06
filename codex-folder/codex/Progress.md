@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P17 — CI/CD (available on request; prior live proof pending)
+**Active Phase:** All local phases through P17 complete; external proof pending
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P17.0 — Walk through GitHub Actions, workflow triggers, job boundaries, secrets, AWS OIDC role assumption, and free-tier limits before adding CI/CD.
+**Immediate Next Step:** Complete manual proof items in `MANUAL_TASKS_CHECKLIST.md`.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P16 local implementation adds setup guides, architecture docs, five-minute demo script, operations runbook, recovery drill, secret rotation, approaching-limits policy, incident rehearsal template, docs readiness tests, and `P16_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, P14 live observability proof, P15 live deployment proof, and P16 live demo/incident proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P17 local implementation adds separate PR and deploy workflows, AWS OIDC deploy posture, latency baseline guard, scanner policy drift guard, deterministic required-path guard, CI free-tier plan, CI readiness tests, and `P17_README.md`. Local implementation phases through P17 are complete. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, P14 live observability proof, P15 live deployment proof, P16 live demo/incident proof, and P17 live workflow proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -507,26 +507,26 @@
 
 ---
 
-## P17 — CI/CD `[available on request]`
+## P17 — CI/CD `[local implementation complete — live workflow proof pending]`
 **Goal:** Automate testing and deployment with OIDC cloud auth and free-tier-aware usage.
 
 **Steps:**
-- [ ] P17.0 Walk through GitHub Actions, workflow triggers, job boundaries, secrets, AWS OIDC role assumption, and free-tier limits before adding CI/CD
-- [ ] P17.1 Create the pull-request workflow
-- [ ] P17.2 Add the Node setup and dependency-install job steps used by PR validation
-- [ ] P17.3 Run lint on every PR
-- [ ] P17.4 Run typecheck on every PR
-- [ ] P17.5 Run tests on every PR
-- [ ] P17.6 Block deploy when tests fail
-- [ ] P17.7 Create the deploy workflow or explicit live-deploy path
-- [ ] P17.8 Use AWS OIDC role assumption instead of static cloud credentials
-- [ ] P17.9 Store or update the latency baseline artifact used by the regression guard
-- [ ] P17.10 Add the latency regression guard tied to the established baseline and documented tolerance rule
-- [ ] P17.11 Store the enforced scanner-registry baseline snapshot used by drift detection
-- [ ] P17.12 Add the scanner-policy drift guard tied to the enforced scanner baseline
-- [ ] P17.13 Add the deterministic non-AI guard for the required-check path
-- [ ] P17.14 Keep PR validation jobs separate from deploy jobs so the default CI path stays cheap
-- [ ] P17.15 Confirm CI usage stays within free GitHub Actions limits or move the path to a self-hosted runner
+- [x] P17.0 Walk through GitHub Actions, workflow triggers, job boundaries, secrets, AWS OIDC role assumption, and free-tier limits before adding CI/CD
+- [x] P17.1 Create the pull-request workflow
+- [x] P17.2 Add the Node setup and dependency-install job steps used by PR validation
+- [x] P17.3 Run lint on every PR
+- [x] P17.4 Run typecheck on every PR
+- [x] P17.5 Run tests on every PR
+- [x] P17.6 Block deploy when tests fail
+- [x] P17.7 Create the deploy workflow or explicit live-deploy path
+- [x] P17.8 Use AWS OIDC role assumption instead of static cloud credentials
+- [x] P17.9 Store or update the latency baseline artifact used by the regression guard
+- [x] P17.10 Add the latency regression guard tied to the established baseline and documented tolerance rule
+- [x] P17.11 Store the enforced scanner-registry baseline snapshot used by drift detection
+- [x] P17.12 Add the scanner-policy drift guard tied to the enforced scanner baseline
+- [x] P17.13 Add the deterministic non-AI guard for the required-check path
+- [x] P17.14 Keep PR validation jobs separate from deploy jobs so the default CI path stays cheap
+- [x] P17.15 Confirm CI usage stays within free GitHub Actions limits or move the path to a self-hosted runner
 - [ ] P17.16 Show passing and failing workflow runs plus each guard in action
 
 **Proof:** Show GitHub Actions logs for passing and failing PRs, an OIDC-based deploy run, latency regression guard behavior, scanner-policy drift guard behavior, deterministic non-AI guard behavior, and evidence that the chosen CI path fits the free-tier plan.
