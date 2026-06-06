@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, and P13
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, and P14
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, and P13 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, and live reliability hardening evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, and P14 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, and live observability evidence remains manual.
 
 ---
 
@@ -163,6 +163,24 @@
 - [ ] P13.M9 Confirm deployment-owner approval before enabling any optional AGPL or GPL scanner.
 
 **Proof:** Live AWS/GitHub logs, CloudWatch alarm evidence, runtime-policy or quota evidence, GitHub redelivery evidence, incident notes, and owner approval evidence for any cautious-license scanner.
+
+---
+
+## P14 — Free-Tier-Safe Observability and Performance `[manual proof pending]`
+
+**Goal:** Prove observability and latency behavior against deployed runs without adding paid telemetry requirements.
+
+**Tasks:**
+- [ ] P14.M1 Capture live webhook-to-check latency samples before a runtime or deployment change.
+- [ ] P14.M2 Capture live webhook-to-check latency samples after the change and calculate p50 and p95.
+- [ ] P14.M3 Show one CloudWatch Logs Insights query or console view using delivery ID, repository, PR number, lane, head SHA, run status, and budget mode fields.
+- [ ] P14.M4 Show per-scanner runtime and finding-volume metrics for at least one live run.
+- [ ] P14.M5 Show lane admission, lane denial, and coverage-gap metrics for fast and deep lanes.
+- [ ] P14.M6 Show Pack 1 and any enabled deep-lane budget metrics.
+- [ ] P14.M7 Confirm log retention and metric cardinality remain inside the free-tier-safe plan.
+- [ ] P14.M8 Confirm alarm thresholds and operator actions are acceptable for live traffic.
+
+**Proof:** Live latency samples, p50/p95 calculation, CloudWatch logs or query evidence, metrics evidence, free-tier cardinality review, and alarm threshold review.
 
 ---
 

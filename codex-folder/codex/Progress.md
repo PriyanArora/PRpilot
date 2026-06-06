@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P14 — Free-Tier-Safe Observability and Performance (available on request; prior live proof pending)
+**Active Phase:** P15 — Self-Hosted Deployment Validation (available on request; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P14.0 — Walk through CloudWatch logs, metrics, alarms, cardinality, retention, and free-tier cost controls before adding observability.
+**Immediate Next Step:** P15.0 — Walk through live AWS deployment, Parameter Store secret setup, GitHub App installation, selected-repo scope, and rollback posture before deploying.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P13 local implementation adds reliability hardening helpers for bounded retry policy, low-concurrency validation, synthetic burst simulation, quota-driven budget-mode transitions, lane-specific budget shedding, alarm action mapping, runbook outcome mapping, AGPL/GPL execution boundaries, local integration tests, and `P13_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, and P13 live reliability proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P14 local implementation adds free-tier-safe structured logs, low-cardinality metric helpers, metric cardinality guards, latency p50/p95 comparison, scanner runtime and finding-volume metrics, lane decision and coverage-gap metrics, pack budget metrics, alarm threshold actions, a CloudWatch Logs Insights query, local unit tests, and `P14_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, and P14 live observability proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -430,24 +430,24 @@
 
 ---
 
-## P14 — Free-Tier-Safe Observability and Performance `[available on request]`
+## P14 — Free-Tier-Safe Observability and Performance `[local implementation complete — live observability proof pending]`
 **Goal:** Measure and improve webhook-to-check latency without adding expensive telemetry.
 
 **Steps:**
-- [ ] P14.0 Walk through CloudWatch logs, metrics, alarms, cardinality, retention, and free-tier cost controls before adding observability
-- [ ] P14.1 Add structured logs with delivery ID, repository, PR number, lane, head SHA, run status, and budget mode
-- [ ] P14.2 Add low-cardinality metrics for core latency and failure counts
-- [ ] P14.3 Expose the minimal alarm set without requiring rich paid observability products
-- [ ] P14.4 Record baseline latency before optimization
-- [ ] P14.5 Improve latency from that baseline
-- [ ] P14.6 Record after-change latency with at least p50 and p95
-- [ ] P14.7 Define threshold values for error, throttling, queue depth, latency, and budget-mode alarms
-- [ ] P14.8 Map each alarm threshold to an operational action
-- [ ] P14.9 Capture per-scanner runtime metrics
-- [ ] P14.10 Capture per-scanner finding-volume metrics
-- [ ] P14.11 Capture lane-admission, lane-denial, and coverage-gap metrics separately for fast lane and deep lane
-- [ ] P14.12 Capture pack-level budget metrics for Pack 1 and any enabled deep-lane runs
-- [ ] P14.13 Confirm log retention and metric volume stay within the free-tier-safe plan
+- [x] P14.0 Walk through CloudWatch logs, metrics, alarms, cardinality, retention, and free-tier cost controls before adding observability
+- [x] P14.1 Add structured logs with delivery ID, repository, PR number, lane, head SHA, run status, and budget mode
+- [x] P14.2 Add low-cardinality metrics for core latency and failure counts
+- [x] P14.3 Expose the minimal alarm set without requiring rich paid observability products
+- [x] P14.4 Record baseline latency before optimization
+- [x] P14.5 Improve latency from that baseline
+- [x] P14.6 Record after-change latency with at least p50 and p95
+- [x] P14.7 Define threshold values for error, throttling, queue depth, latency, and budget-mode alarms
+- [x] P14.8 Map each alarm threshold to an operational action
+- [x] P14.9 Capture per-scanner runtime metrics
+- [x] P14.10 Capture per-scanner finding-volume metrics
+- [x] P14.11 Capture lane-admission, lane-denial, and coverage-gap metrics separately for fast lane and deep lane
+- [x] P14.12 Capture pack-level budget metrics for Pack 1 and any enabled deep-lane runs
+- [x] P14.13 Confirm log retention and metric volume stay within the free-tier-safe plan
 - [ ] P14.14 Show one log query or CloudWatch console view if used
 
 **Proof:** Show before/after latency values (including p50 and p95), alarm coverage, one log query or CloudWatch console view if used, per-scanner timing breakdown, lane-admission versus lane-denial metrics, and pack-level budget report.
