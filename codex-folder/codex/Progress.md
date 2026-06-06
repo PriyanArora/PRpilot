@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P9 — Repository Policy Config (local implementation in progress; prior live proof pending)
+**Active Phase:** P10 — App Permission and Installation Hardening (local implementation in progress; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P9.1 — Reuse and validate the P4 deployment-owner runtime-policy schema before applying repository overrides.
+**Immediate Next Step:** P10.1 — Enforce the documented permission matrix in code or auth checks.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P8 has `P8_README.md`, but no P8 checkbox is complete until live proof is shown. P9 local implementation adds repository policy parsing, validation, owner-policy validation, path filtering, threshold overrides, scanner controls, deep opt-in handling, quota caps, owner-cap rejection, local tests, and `P9_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, and P9 live repository-policy PR proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P9 local implementation is complete and committed. P10 local implementation adds installation authorization, fork base-repository handling, PRPilot-owned requested-action validation, stale-action rejection, local tests, and `P10_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, and P10 live authorization proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -328,22 +328,22 @@
 
 ---
 
-## P10 — App Permission and Installation Hardening `[available on request]`
+## P10 — App Permission and Installation Hardening `[local implementation complete — external GitHub proof pending]`
 **Goal:** Process only in-scope installations and handle fork PR context safely.
 
 **Steps:**
-- [ ] P10.1 Enforce the documented permission matrix in code or auth checks
-- [ ] P10.2 Resolve installation identity from every supported webhook event shape
-- [ ] P10.3 Accept events from installed same-repo repositories
-- [ ] P10.4 Resolve fork pull-request context safely without depending on `check_suite.pull_requests`
-- [ ] P10.5 Reject events from non-installed repositories
-- [ ] P10.6 Reject unauthorized access paths safely
-- [ ] P10.7 Validate `check_run.requested_action` events came from PRPilot-owned checks
-- [ ] P10.8 Reject stale or mismatched deep-scan action requests for older SHAs
-- [ ] P10.9 Keep authorization and permission tests passing
-- [ ] P10.10 Enforce installation-scope guardrails
-- [ ] P10.11 Enforce the selected-repository scope rules
-- [ ] P10.12 Show logs and tests for accepted, rejected, stale-action, and out-of-scope cases
+- [x] P10.1 Enforce the documented permission matrix in code or auth checks
+- [x] P10.2 Resolve installation identity from every supported webhook event shape
+- [x] P10.3 Accept events from installed same-repo repositories
+- [x] P10.4 Resolve fork pull-request context safely without depending on `check_suite.pull_requests`
+- [x] P10.5 Reject events from non-installed repositories
+- [x] P10.6 Reject unauthorized access paths safely
+- [x] P10.7 Validate `check_run.requested_action` events came from PRPilot-owned checks
+- [x] P10.8 Reject stale or mismatched deep-scan action requests for older SHAs
+- [x] P10.9 Keep authorization and permission tests passing
+- [x] P10.10 Enforce installation-scope guardrails
+- [x] P10.11 Enforce the selected-repository scope rules
+- [x] P10.12 Show logs and tests for accepted, rejected, stale-action, and out-of-scope cases
 
 **Proof:** Show test logs for installed same-repo events, installed fork pull-request events, rejected non-installed repository events, stale or mismatched deep-action rejections, and installation-scope enforcement evidence.
 

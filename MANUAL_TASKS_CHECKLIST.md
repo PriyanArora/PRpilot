@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, and P9
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, and P10
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9 local implementation has a local proof path; live repository-policy PR evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9 and P10 have local proof paths; live repository-policy and authorization evidence remains manual.
 
 ---
 
@@ -97,6 +97,22 @@
 - [ ] P9.M7 Show one case proving repo config cannot override a deployment-owner cap.
 
 **Proof:** GitHub PR/check-run evidence or copied controlled-run output for config differences, invalid config, scanner policy changes, deep opt-in behavior, quota behavior, and owner-cap rejection.
+
+---
+
+## P10 — App Permission and Installation Hardening `[manual proof pending]`
+
+**Goal:** Prove GitHub App authorization behavior against real webhook/action data.
+
+**Tasks:**
+- [ ] P10.M1 Show accepted installed same-repo webhook logs.
+- [ ] P10.M2 Show accepted fork PR webhook logs using the installed base repository for authorization.
+- [ ] P10.M3 Show rejected non-installed repository event evidence.
+- [ ] P10.M4 Show rejected selected-scope violation evidence.
+- [ ] P10.M5 Show stale or mismatched deep-action rejection from a real `check_run.requested_action`.
+- [ ] P10.M6 Show GitHub App permission settings still match the least-privilege matrix.
+
+**Proof:** GitHub App settings, webhook logs, and action logs for accepted same-repo, accepted fork base-repo, rejected non-installed, rejected out-of-scope, and stale-action cases.
 
 ---
 
