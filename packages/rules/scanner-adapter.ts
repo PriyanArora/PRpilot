@@ -17,5 +17,5 @@ export type ScannerAdapterResult = {
 
 export type ScannerAdapter = {
     scanner: string;
-    run(input: ScannerAdapterInput): Promise<ScannerAdapterResult>;
+    run(input: ScannerAdapterInput): Promise<ScannerAdapterResult>; //type scanneradapater must have scanner as string and have a method that takes input written and async return scanneradaptresult
 };
