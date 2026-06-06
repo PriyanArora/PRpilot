@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P13 — Reliability Hardening (available on request; prior live proof pending)
+**Active Phase:** P14 — Free-Tier-Safe Observability and Performance (available on request; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P13.1 — Run repeated-delivery tests or load that exercise idempotency.
+**Immediate Next Step:** P14.0 — Walk through CloudWatch logs, metrics, alarms, cardinality, retention, and free-tier cost controls before adding observability.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P12 local implementation adds a CDK app, API Gateway webhook route, webhook and worker Lambdas, SQS queue and DLQ, DynamoDB table with TTL, least-scope grants, log retention, reserved concurrency, budget-related stack parameters, stack outputs, `npm run infra:synth`, and `P12_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, and P12 live AWS diff/deploy proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P13 local implementation adds reliability hardening helpers for bounded retry policy, low-concurrency validation, synthetic burst simulation, quota-driven budget-mode transitions, lane-specific budget shedding, alarm action mapping, runbook outcome mapping, AGPL/GPL execution boundaries, local integration tests, and `P13_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, and P13 live reliability proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -398,32 +398,32 @@
 
 ---
 
-## P13 — Reliability Hardening `[available on request]`
+## P13 — Reliability Hardening `[local implementation complete — live reliability proof pending]`
 **Goal:** Make retries, replays, concurrency, and budget-mode behavior safe under low-cost self-hosted traffic.
 
 **Steps:**
-- [ ] P13.1 Run repeated-delivery tests or load that exercise idempotency
-- [ ] P13.2 Prove duplicate deliveries do not create duplicate side effects
-- [ ] P13.3 Tune queue visibility timeout
-- [ ] P13.4 Tune retry policy for bounded cost
-- [ ] P13.5 Configure alarms for failures, DLQ depth, throttling, and budget-mode transitions
-- [ ] P13.6 Run a synthetic burst test
-- [ ] P13.7 Validate webhook and worker concurrency settings under burst load
-- [ ] P13.8 Validate rerun throttles under burst load
-- [ ] P13.9 Define runtime policy modes: `normal`, `conserve`, and `emergency`
-- [ ] P13.10 Exercise at least one quota-counter-driven transition into each budget mode
-- [ ] P13.10a Document dollar-based budget response through AWS Budgets alarms or deployment-owner runtime-policy intervention
-- [ ] P13.11 Exercise the deep-lane deny path under conserve or emergency mode
-- [ ] P13.12 Map scanner timeout handling to a runbook step
-- [ ] P13.13 Map scanner failure handling to a runbook step
-- [ ] P13.14 Document the lane-specific budget-shedding order: deny deep, reduce presentation, then block required-path gaps honestly
-- [ ] P13.15 Map oversized-run handling to a runbook step
-- [ ] P13.16 Map unsupported-repo handling to a runbook step
-- [ ] P13.17 Map quota-exhaustion handling to a runbook step
-- [ ] P13.18 Map partial-coverage handling to a runbook step
-- [ ] P13.19 Document the GitHub failed-delivery redelivery procedure
+- [x] P13.1 Run repeated-delivery tests or load that exercise idempotency
+- [x] P13.2 Prove duplicate deliveries do not create duplicate side effects
+- [x] P13.3 Tune queue visibility timeout
+- [x] P13.4 Tune retry policy for bounded cost
+- [x] P13.5 Configure alarms for failures, DLQ depth, throttling, and budget-mode transitions
+- [x] P13.6 Run a synthetic burst test
+- [x] P13.7 Validate webhook and worker concurrency settings under burst load
+- [x] P13.8 Validate rerun throttles under burst load
+- [x] P13.9 Define runtime policy modes: `normal`, `conserve`, and `emergency`
+- [x] P13.10 Exercise at least one quota-counter-driven transition into each budget mode
+- [x] P13.10a Document dollar-based budget response through AWS Budgets alarms or deployment-owner runtime-policy intervention
+- [x] P13.11 Exercise the deep-lane deny path under conserve or emergency mode
+- [x] P13.12 Map scanner timeout handling to a runbook step
+- [x] P13.13 Map scanner failure handling to a runbook step
+- [x] P13.14 Document the lane-specific budget-shedding order: deny deep, reduce presentation, then block required-path gaps honestly
+- [x] P13.15 Map oversized-run handling to a runbook step
+- [x] P13.16 Map unsupported-repo handling to a runbook step
+- [x] P13.17 Map quota-exhaustion handling to a runbook step
+- [x] P13.18 Map partial-coverage handling to a runbook step
+- [x] P13.19 Document the GitHub failed-delivery redelivery procedure
 - [ ] P13.20 Practice one failed-delivery redelivery
-- [ ] P13.21 Document AGPL and GPL execution boundaries for cautious tools
+- [x] P13.21 Document AGPL and GPL execution boundaries for cautious tools
 - [ ] P13.22 Show the full proof set for load, alarms, throttling, budget modes, redelivery, and license boundaries
 
 **Proof:** Show load-test results, alarm trigger or clear behavior, throttling control under burst conditions, budget-mode transition evidence, rerun-throttle evidence, one oversized or quota-exhaustion handling example, one deep-lane deny example, GitHub failed-delivery redelivery evidence, and license-boundary runbook notes.

@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, and P12
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, and P13
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, and P12 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, and live AWS IaC evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, and P13 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, and live reliability hardening evidence remains manual.
 
 ---
 
@@ -144,6 +144,25 @@
 - [ ] P12.M6 Confirm Lambda environment values contain Parameter Store names only, not secret contents.
 
 **Proof:** CDK synth and diff output from the target account, deployed stack outputs, AWS console or CLI evidence for TTL, queue redrive, concurrency, log retention, and Parameter Store-name-only environment configuration.
+
+---
+
+## P13 — Reliability Hardening `[manual proof pending]`
+
+**Goal:** Prove reliability behavior against deployed AWS/GitHub traffic and operational tooling.
+
+**Tasks:**
+- [ ] P13.M1 Run repeated-delivery tests or load against the deployed path.
+- [ ] P13.M2 Show duplicate deliveries do not create duplicate check runs, queue jobs, or persistence side effects.
+- [ ] P13.M3 Run a synthetic burst against the deployed path and show fast-lane priority under backlog.
+- [ ] P13.M4 Show live CloudWatch or CLI evidence for failure, DLQ depth, throttling, queue-age, and budget-mode transition alarms.
+- [ ] P13.M5 Exercise `normal`, `conserve`, and `emergency` budget modes through live runtime policy or quota counters.
+- [ ] P13.M6 Show an optional deep-lane denial under conserve or emergency mode.
+- [ ] P13.M7 Practice one GitHub failed-delivery redelivery.
+- [ ] P13.M8 Show incident notes mapping scanner timeout, scanner failure, oversized run, unsupported repo, quota exhaustion, and partial coverage to runbook actions.
+- [ ] P13.M9 Confirm deployment-owner approval before enabling any optional AGPL or GPL scanner.
+
+**Proof:** Live AWS/GitHub logs, CloudWatch alarm evidence, runtime-policy or quota evidence, GitHub redelivery evidence, incident notes, and owner approval evidence for any cautious-license scanner.
 
 ---
 
