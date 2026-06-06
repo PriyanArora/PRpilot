@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, and P10
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, and P11
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9 and P10 have local proof paths; live repository-policy and authorization evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, and P11 have local proof paths; live repository-policy, authorization, and real-repo preflight comparison evidence remains manual.
 
 ---
 
@@ -113,6 +113,21 @@
 - [ ] P10.M6 Show GitHub App permission settings still match the least-privilege matrix.
 
 **Proof:** GitHub App settings, webhook logs, and action logs for accepted same-repo, accepted fork base-repo, rejected non-installed, rejected out-of-scope, and stale-action cases.
+
+---
+
+## P11 — Optional Local Preflight CLI `[manual proof pending]`
+
+**Goal:** Prove local preflight use on a real target repository.
+
+**Tasks:**
+- [ ] P11.M1 Run `npm run preflight -- --base <branch>` inside a real target repository.
+- [ ] P11.M2 Show one failing local preflight case and exit code `1`.
+- [ ] P11.M3 Show one passing local preflight case and exit code `0`.
+- [ ] P11.M4 Compare one local preflight failure with the deployed `PRPilot Fast` result for the same logical change.
+- [ ] P11.M5 Confirm the baseline ESLint limitation note is visible in real CLI output.
+
+**Proof:** Terminal output from real target repository runs and one comparison against deployed PRPilot check behavior.
 
 ---
 

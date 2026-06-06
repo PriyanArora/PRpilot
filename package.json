@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "webhook:dev": "node apps/webhook/dev-server.mjs",
-    "proof:p5:failure": "node scripts/publish-p5-failure-check.mjs"
+    "proof:p5:failure": "node scripts/publish-p5-failure-check.mjs",
+    "preflight": "node apps/cli/preflight.mjs"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",

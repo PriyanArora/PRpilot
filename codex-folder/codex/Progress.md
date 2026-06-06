@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P10 — App Permission and Installation Hardening (local implementation in progress; prior live proof pending)
+**Active Phase:** P11 — Optional Local Preflight CLI (local implementation in progress; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P10.1 — Enforce the documented permission matrix in code or auth checks.
+**Immediate Next Step:** P11.1 — Define the CLI entry point.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P9 local implementation is complete and committed. P10 local implementation adds installation authorization, fork base-repository handling, PRPilot-owned requested-action validation, stale-action rejection, local tests, and `P10_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, and P10 live authorization proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P10 local implementation is complete and committed. P11 local implementation adds the `npm run preflight` CLI, git merge-base detection, changed-file collection, local `.prpilot.yml` path filtering, internal fast-lane rule mirroring, deployed-style JSON output, exit-code semantics, local integration tests, and `P11_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, and P11 real-repo preflight comparison remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -349,23 +349,23 @@
 
 ---
 
-## P11 — Optional Local Preflight CLI `[available on request]`
+## P11 — Optional Local Preflight CLI `[local implementation complete — real-repo comparison pending]`
 **Goal:** Add a local deterministic preflight command that mirrors deployed review logic closely enough to save runtime work.
 
 **Steps:**
-- [ ] P11.1 Define the CLI entry point
-- [ ] P11.2 Parse a base-ref argument or resolve the repository default branch automatically
-- [ ] P11.3 Resolve the merge base for the current branch
-- [ ] P11.4 Collect local changed files for analysis
-- [ ] P11.5 Load local repo config using the same validation path as the deployed fast lane
-- [ ] P11.6 Run deterministic fast-lane rules on the local changes
-- [ ] P11.7 Reuse the deployed findings and coverage shapes in local output
-- [ ] P11.8 Keep the local summary aligned with the deployed check-run summary order
-- [ ] P11.8a Disclose that PRPilot baseline ESLint results may differ from the repository's own ESLint setup
-- [ ] P11.9 Return exit code `1` when critical findings exist
-- [ ] P11.10 Return exit code `1` when the CLI cannot perform an honest local fast-lane review
-- [ ] P11.11 Return exit code `0` when the preflight passes or only warns
-- [ ] P11.12 Show the CLI on one failing case and one passing case
+- [x] P11.1 Define the CLI entry point
+- [x] P11.2 Parse a base-ref argument or resolve the repository default branch automatically
+- [x] P11.3 Resolve the merge base for the current branch
+- [x] P11.4 Collect local changed files for analysis
+- [x] P11.5 Load local repo config using the same validation path as the deployed fast lane
+- [x] P11.6 Run deterministic fast-lane rules on the local changes
+- [x] P11.7 Reuse the deployed findings and coverage shapes in local output
+- [x] P11.8 Keep the local summary aligned with the deployed check-run summary order
+- [x] P11.8a Disclose that PRPilot baseline ESLint results may differ from the repository's own ESLint setup
+- [x] P11.9 Return exit code `1` when critical findings exist
+- [x] P11.10 Return exit code `1` when the CLI cannot perform an honest local fast-lane review
+- [x] P11.11 Return exit code `0` when the preflight passes or only warns
+- [x] P11.12 Show the CLI on one failing case and one passing case
 
 **Proof:** Run the CLI on failing and passing cases, show summary output, and show exit codes.
 
