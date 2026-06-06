@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P15 — Self-Hosted Deployment Validation (available on request; prior live proof pending)
+**Active Phase:** P16 — Documentation and Demo Readiness (available on request; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P15.0 — Walk through live AWS deployment, Parameter Store secret setup, GitHub App installation, selected-repo scope, and rollback posture before deploying.
+**Immediate Next Step:** P16.1 — Write the self-host quickstart guide.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P14 local implementation adds free-tier-safe structured logs, low-cardinality metric helpers, metric cardinality guards, latency p50/p95 comparison, scanner runtime and finding-volume metrics, lane decision and coverage-gap metrics, pack budget metrics, alarm threshold actions, a CloudWatch Logs Insights query, local unit tests, and `P14_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, and P14 live observability proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P15 local implementation adds live deployment config validation, selected-repository scope validation, deep-scan default validation, cost-control checks, warn-first rollout plans, scanner-pack promotion gates, runtime-policy rollback planning, rollback timing measurement, a config validation CLI, local unit tests, and `P15_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, P14 live observability proof, and P15 live deployment proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -454,28 +454,28 @@
 
 ---
 
-## P15 — Self-Hosted Deployment Validation `[available on request]`
+## P15 — Self-Hosted Deployment Validation `[local implementation complete — live deployment proof pending]`
 **Goal:** Deploy the live backend in a user-owned AWS account and prove it works with the private GitHub App.
 
 **Steps:**
-- [ ] P15.0 Walk through live AWS deployment, Parameter Store secret setup, GitHub App installation, selected-repo scope, and rollback posture before deploying
+- [x] P15.0 Walk through live AWS deployment, Parameter Store secret setup, GitHub App installation, selected-repo scope, and rollback posture before deploying
 - [ ] P15.1 Deploy the live stack through IaC
-- [ ] P15.2 Wire secure Parameter Store values into the runtime
+- [x] P15.2 Wire secure Parameter Store values into the runtime
 - [ ] P15.3 Prove the live webhook endpoint is reachable
 - [ ] P15.4 Install the private GitHub App on one selected repository
 - [ ] P15.5 Validate end-to-end live PR review in that selected repository
-- [ ] P15.6 Enforce selected-repository scope in the live path
-- [ ] P15.7 Enforce deep-scan defaults in the live path
-- [ ] P15.8 Enforce cost ceilings or budget-mode controls in the live path
+- [x] P15.6 Enforce selected-repository scope in the live path
+- [x] P15.7 Enforce deep-scan defaults in the live path
+- [x] P15.8 Enforce cost ceilings or budget-mode controls in the live path
 - [ ] P15.9 Show one live optional deep-lane manual trigger or explicit disabled/denied deep-lane state in GitHub UI
-- [ ] P15.10 Define the staged-rollout target repo and rollback trigger before changing live scanner behavior
-- [ ] P15.11 Apply a warn-only rollout to the selected low-risk repo first
+- [x] P15.10 Define the staged-rollout target repo and rollback trigger before changing live scanner behavior
+- [x] P15.11 Apply a warn-only rollout to the selected low-risk repo first
 - [ ] P15.12 Observe live stability and budget evidence before promotion
-- [ ] P15.13 Verify the rollback path works through runtime policy first
-- [ ] P15.14 Measure rollback timing
-- [ ] P15.15 Roll out a new scanner pack in warn mode first
-- [ ] P15.16 Promote the scanner pack only after at least 10 representative live runs or 7 days of warn-first observation, plus stability and budget validation
-- [ ] P15.17 Enforce rollout order from Pack 1 to Pack 3
+- [x] P15.13 Verify the rollback path works through runtime policy first
+- [x] P15.14 Measure rollback timing
+- [x] P15.15 Roll out a new scanner pack in warn mode first
+- [x] P15.16 Promote the scanner pack only after at least 10 representative live runs or 7 days of warn-first observation, plus stability and budget validation
+- [x] P15.17 Enforce rollout order from Pack 1 to Pack 3
 - [ ] P15.18 Show live webhook health, live PR evidence, rollout evidence, and budget-mode or selected-repository scope evidence
 
 **Proof:** Show live webhook health, a successful live fast-lane PR check run, one live optional deep-lane result or denial, selected-repository scope or budget-mode evidence, staged rollout evidence with rollback timing, one scanner-pack promotion record, and rollout-order evidence.

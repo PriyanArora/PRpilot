@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, and P14
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, and P15
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, and P14 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, and live observability evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, P14, and P15 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, live observability evidence, and live deployment validation evidence remains manual.
 
 ---
 
@@ -181,6 +181,29 @@
 - [ ] P14.M8 Confirm alarm thresholds and operator actions are acceptable for live traffic.
 
 **Proof:** Live latency samples, p50/p95 calculation, CloudWatch logs or query evidence, metrics evidence, free-tier cardinality review, and alarm threshold review.
+
+---
+
+## P15 — Self-Hosted Deployment Validation `[manual proof pending]`
+
+**Goal:** Prove the self-hosted deployment works in the intended AWS account and selected GitHub repository.
+
+**Tasks:**
+- [ ] P15.M1 Deploy the live CDK stack in the intended AWS account and region.
+- [ ] P15.M2 Create or verify Parameter Store values for webhook secret, GitHub private key, and runtime policy.
+- [ ] P15.M3 Prove the live webhook endpoint is reachable from GitHub.
+- [ ] P15.M4 Install the private GitHub App on one selected repository.
+- [ ] P15.M5 Show one successful live fast-lane PR check run.
+- [ ] P15.M6 Show selected-repository scope rejecting or ignoring a non-selected repository.
+- [ ] P15.M7 Show deep-scan default behavior in GitHub UI: disabled, denied, or manually triggered with quota proof.
+- [ ] P15.M8 Show cost ceilings or budget-mode controls in the live path.
+- [ ] P15.M9 Apply a warn-first scanner rollout to the selected low-risk repository.
+- [ ] P15.M10 Observe live stability and budget evidence before promotion.
+- [ ] P15.M11 Verify runtime-policy rollback and record rollback timing.
+- [ ] P15.M12 Show scanner-pack promotion evidence only after 10 representative runs or 7 observation days.
+- [ ] P15.M13 Show Pack 1 to Pack 3 rollout-order evidence.
+
+**Proof:** CDK deployment output, Parameter Store evidence, GitHub App installation evidence, live webhook and PR check evidence, scope/budget/deep-lane evidence, rollout evidence, rollback timing, and scanner-pack promotion evidence.
 
 ---
 
