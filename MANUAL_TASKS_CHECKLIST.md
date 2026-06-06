@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, and P15
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, and P16
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, P14, and P15 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, live observability evidence, and live deployment validation evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, P12, P13, P14, P15, and P16 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, live AWS IaC evidence, live reliability hardening evidence, live observability evidence, live deployment validation evidence, and live demo/incident evidence remains manual.
 
 ---
 
@@ -204,6 +204,21 @@
 - [ ] P15.M13 Show Pack 1 to Pack 3 rollout-order evidence.
 
 **Proof:** CDK deployment output, Parameter Store evidence, GitHub App installation evidence, live webhook and PR check evidence, scope/budget/deep-lane evidence, rollout evidence, rollback timing, and scanner-pack promotion evidence.
+
+---
+
+## P16 — Documentation and Demo Readiness `[manual proof pending]`
+
+**Goal:** Prove the docs and runbooks work against the live demo and an incident rehearsal.
+
+**Tasks:**
+- [ ] P16.M1 Run the five-minute demo script end-to-end against the live selected repository without manual patching.
+- [ ] P16.M2 Show the demo includes a blocking `PRPilot Fast` result, branch-protection block, fix, passing result, and merge.
+- [ ] P16.M3 Rehearse one incident scenario using `docs/operations-runbook.md`.
+- [ ] P16.M4 Record the incident timeline using `docs/incident-rehearsal.md`.
+- [ ] P16.M5 Show recovery-drill or DLQ-replay evidence used during rehearsal.
+
+**Proof:** Demo recording or notes, GitHub PR evidence, runbook rehearsal notes, incident timeline, and recovery or DLQ evidence.
 
 ---
 

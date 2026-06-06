@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P16 — Documentation and Demo Readiness (available on request; prior live proof pending)
+**Active Phase:** P17 — CI/CD (available on request; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P16.1 — Write the self-host quickstart guide.
+**Immediate Next Step:** P17.0 — Walk through GitHub Actions, workflow triggers, job boundaries, secrets, AWS OIDC role assumption, and free-tier limits before adding CI/CD.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P15 local implementation adds live deployment config validation, selected-repository scope validation, deep-scan default validation, cost-control checks, warn-first rollout plans, scanner-pack promotion gates, runtime-policy rollback planning, rollback timing measurement, a config validation CLI, local unit tests, and `P15_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, P14 live observability proof, and P15 live deployment proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P16 local implementation adds setup guides, architecture docs, five-minute demo script, operations runbook, recovery drill, secret rotation, approaching-limits policy, incident rehearsal template, docs readiness tests, and `P16_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, P12 live AWS diff/deploy proof, P13 live reliability proof, P14 live observability proof, P15 live deployment proof, and P16 live demo/incident proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -482,24 +482,24 @@
 
 ---
 
-## P16 — Documentation and Demo Readiness `[available on request]`
+## P16 — Documentation and Demo Readiness `[local documentation complete — live demo proof pending]`
 **Goal:** Make the project demoable, explainable, and operable.
 
 **Steps:**
-- [ ] P16.1 Write the self-host quickstart guide
-- [ ] P16.2 Document local setup prerequisites and local run commands
-- [ ] P16.3 Document live deployment prerequisites and AWS expectations
-- [ ] P16.4 Write the private GitHub App and user-owned AWS setup guide
-- [ ] P16.5 Document the security architecture
-- [ ] P16.6 Document the cost-control architecture
-- [ ] P16.7 Document the reliability architecture
-- [ ] P16.8 Document queue, persistence, and policy-precedence behavior in plain language
-- [ ] P16.9 Write the five-minute demo script
+- [x] P16.1 Write the self-host quickstart guide
+- [x] P16.2 Document local setup prerequisites and local run commands
+- [x] P16.3 Document live deployment prerequisites and AWS expectations
+- [x] P16.4 Write the private GitHub App and user-owned AWS setup guide
+- [x] P16.5 Document the security architecture
+- [x] P16.6 Document the cost-control architecture
+- [x] P16.7 Document the reliability architecture
+- [x] P16.8 Document queue, persistence, and policy-precedence behavior in plain language
+- [x] P16.9 Write the five-minute demo script
 - [ ] P16.10 Run the demo script end-to-end without manual patching
-- [ ] P16.11 Write the operations runbook
-- [ ] P16.12 Document the recovery drill
-- [ ] P16.13 Document the secret rotation procedure
-- [ ] P16.14 Document the "approaching limits" policy
+- [x] P16.11 Write the operations runbook
+- [x] P16.12 Document the recovery drill
+- [x] P16.13 Document the secret rotation procedure
+- [x] P16.14 Document the "approaching limits" policy
 - [ ] P16.15 Rehearse one incident scenario using the runbook
 - [ ] P16.16 Record the incident timeline and evidence
 
