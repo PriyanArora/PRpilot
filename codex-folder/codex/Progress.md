@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P11 — Optional Local Preflight CLI (local implementation in progress; prior live proof pending)
+**Active Phase:** P13 — Reliability Hardening (available on request; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
-**Immediate Next Step:** P11.1 — Define the CLI entry point.
+**Immediate Next Step:** P13.1 — Run repeated-delivery tests or load that exercise idempotency.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P10 local implementation is complete and committed. P11 local implementation adds the `npm run preflight` CLI, git merge-base detection, changed-file collection, local `.prpilot.yml` path filtering, internal fast-lane rule mirroring, deployed-style JSON output, exit-code semantics, local integration tests, and `P11_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, and P11 real-repo preflight comparison remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P12 local implementation adds a CDK app, API Gateway webhook route, webhook and worker Lambdas, SQS queue and DLQ, DynamoDB table with TTL, least-scope grants, log retention, reserved concurrency, budget-related stack parameters, stack outputs, `npm run infra:synth`, and `P12_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, P9 live repository-policy PR proof, P10 live authorization proof, P11 real-repo preflight comparison, and P12 live AWS diff/deploy proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -371,28 +371,28 @@
 
 ---
 
-## P12 — Infrastructure as Code `[available on request]`
+## P12 — Infrastructure as Code `[local implementation complete — live AWS proof pending]`
 **Goal:** Put the AWS system under CDK control before live hardening and deployment.
 
 **Steps:**
-- [ ] P12.0 Walk through CDK, Lambda, API Gateway, SQS, DynamoDB, IAM, Parameter Store, CloudWatch logs, and AWS cost boundaries before creating infrastructure
-- [ ] P12.1 Create the CDK app entry point
-- [ ] P12.2 Define Lambda resources for webhook ingress and worker processing
-- [ ] P12.3 Define API Gateway for webhook ingress
-- [ ] P12.4 Define SQS and the dead-letter queue
-- [ ] P12.5 Set the queue batch size and event-source mapping to match the low-concurrency lane contract
-- [ ] P12.6 Define the DynamoDB table and TTL configuration
-- [ ] P12.7 Define the minimum IAM permissions needed
-- [ ] P12.8 Define the minimal alarm set
-- [ ] P12.9 Encode Lambda reserved concurrency in IaC
-- [ ] P12.10 Encode log retention in IaC
-- [ ] P12.11 Encode budget-related config and limits in IaC
-- [ ] P12.12 Surface Parameter Store names and runtime env values through the stack safely
-- [ ] P12.13 Keep one required live environment and treat extras as optional
+- [x] P12.0 Walk through CDK, Lambda, API Gateway, SQS, DynamoDB, IAM, Parameter Store, CloudWatch logs, and AWS cost boundaries before creating infrastructure
+- [x] P12.1 Create the CDK app entry point
+- [x] P12.2 Define Lambda resources for webhook ingress and worker processing
+- [x] P12.3 Define API Gateway for webhook ingress
+- [x] P12.4 Define SQS and the dead-letter queue
+- [x] P12.5 Set the queue batch size and event-source mapping to match the low-concurrency lane contract
+- [x] P12.6 Define the DynamoDB table and TTL configuration
+- [x] P12.7 Define the minimum IAM permissions needed
+- [x] P12.8 Define the minimal alarm set
+- [x] P12.9 Encode Lambda reserved concurrency in IaC
+- [x] P12.10 Encode log retention in IaC
+- [x] P12.11 Encode budget-related config and limits in IaC
+- [x] P12.12 Surface Parameter Store names and runtime env values through the stack safely
+- [x] P12.13 Keep one required live environment and treat extras as optional
 - [ ] P12.14 Bring any previously created cloud resources under CDK control
-- [ ] P12.15 Show `cdk synth`
+- [x] P12.15 Show `cdk synth`
 - [ ] P12.16 Show `cdk diff`
-- [ ] P12.17 Surface the stack outputs needed for self-host webhook wiring and runtime config
+- [x] P12.17 Surface the stack outputs needed for self-host webhook wiring and runtime config
 
 **Proof:** Show `cdk synth` and `cdk diff` with expected resource changes only, including queue wiring, concurrency, TTL, log-retention, limit settings, and the outputs needed for webhook configuration.
 

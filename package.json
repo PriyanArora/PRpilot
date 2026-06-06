@@ -16,7 +16,8 @@
     "test": "vitest run --passWithNoTests",
     "webhook:dev": "node apps/webhook/dev-server.mjs",
     "proof:p5:failure": "node scripts/publish-p5-failure-check.mjs",
-    "preflight": "node apps/cli/preflight.mjs"
+    "preflight": "node apps/cli/preflight.mjs",
+    "infra:synth": "cdk synth"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
@@ -24,5 +25,10 @@
     "likit-codex": "^1.0.4",
     "typescript": "^6.0.2",
     "vitest": "^4.0.13"
+  },
+  "dependencies": {
+    "aws-cdk": "^2.1126.0",
+    "aws-cdk-lib": "^2.258.0",
+    "constructs": "^10.6.0"
   }
 }

@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, and P11
+**Current Manual Gate:** External proof for P5, P6, P7, P8, P9, P10, P11, and P12
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, and P11 have local proof paths; live repository-policy, authorization, and real-repo preflight comparison evidence remains manual.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9, P10, P11, and P12 have local proof paths; live repository-policy, authorization, real-repo preflight comparison, and live AWS IaC evidence remains manual.
 
 ---
 
@@ -128,6 +128,22 @@
 - [ ] P11.M5 Confirm the baseline ESLint limitation note is visible in real CLI output.
 
 **Proof:** Terminal output from real target repository runs and one comparison against deployed PRPilot check behavior.
+
+---
+
+## P12 — Infrastructure as Code `[manual proof pending]`
+
+**Goal:** Prove the CDK stack against the intended AWS account and bring live resources under IaC control.
+
+**Tasks:**
+- [ ] P12.M1 Run `npm run infra:synth` and `cdk diff` with the intended AWS account and region.
+- [ ] P12.M2 Show the diff contains only expected PRPilot API Gateway, Lambda, SQS, DynamoDB, IAM, log-retention, and alarm changes.
+- [ ] P12.M3 Import or replace any previously-created live AWS resources so the one required live environment is under CDK control.
+- [ ] P12.M4 Deploy the stack and show the `WebhookUrl`, `ReviewStateTableName`, `ReviewQueueUrl`, and `ReviewJobsDlqUrl` outputs.
+- [ ] P12.M5 Confirm DynamoDB TTL is enabled on `ttl`, the queue redrives to the DLQ, Lambda reserved concurrency is set, and log retention is seven days.
+- [ ] P12.M6 Confirm Lambda environment values contain Parameter Store names only, not secret contents.
+
+**Proof:** CDK synth and diff output from the target account, deployed stack outputs, AWS console or CLI evidence for TTL, queue redrive, concurrency, log retention, and Parameter Store-name-only environment configuration.
 
 ---
 
