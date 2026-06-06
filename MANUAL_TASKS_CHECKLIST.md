@@ -1,10 +1,10 @@
 # Manual Tasks Checklist
 
-**Current Manual Gate:** External proof for P5, P6, P7, and P8
+**Current Manual Gate:** External proof for P5, P6, P7, P8, and P9
 **Purpose:** Track proof that cannot be completed by local code changes alone.
 **Rule:** Do not mark an item complete without concrete evidence such as GitHub UI screenshots, logs, AWS console output, CLI output, or copied query results.
 **Last Updated:** 2026-06-06
-**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence.
+**Session Notes:** P5.M1 is complete by user confirmation: the new GitHub App was installed, webhook events reached the local `webhook:dev` server through ngrok, and the setup can trigger PRPilot from a real PR path. P5.M2 is paused for later; P8 has now been documented in `P8_README.md`, but no P8 live proof item is complete without external evidence. P9 local implementation has a local proof path; live repository-policy PR evidence remains manual.
 
 ---
 
@@ -80,6 +80,23 @@
 - [ ] P8.M10 Show one graceful operational edge case such as unsupported repo, oversized run, quota denial, or required-path coverage gap.
 
 **Proof:** GitHub PR/check-run evidence, webhook logs, latency timestamps from 3 real runs, branch-protection merge-block evidence, successful merge evidence, deep-lane non-interference evidence, and one honest operational edge-case result.
+
+---
+
+## P9 — Repository Policy Config `[manual proof pending]`
+
+**Goal:** Prove repository policy config works on real or controlled PR paths.
+
+**Tasks:**
+- [ ] P9.M1 Show two PR runs with different `.prpilot.yml` configs.
+- [ ] P9.M2 Show one invalid-config PR result that publishes an explicit non-pass operational result.
+- [ ] P9.M3 Show one scanner mode change applied by policy only.
+- [ ] P9.M4 Show one lane assignment change by config.
+- [ ] P9.M5 Show one quota or opt-in policy example.
+- [ ] P9.M6 Show one manual-vs-auto deep opt-in example.
+- [ ] P9.M7 Show one case proving repo config cannot override a deployment-owner cap.
+
+**Proof:** GitHub PR/check-run evidence or copied controlled-run output for config differences, invalid config, scanner policy changes, deep opt-in behavior, quota behavior, and owner-cap rejection.
 
 ---
 

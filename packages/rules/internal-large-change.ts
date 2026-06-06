@@ -9,13 +9,21 @@ export type LargeChangeRuleResult = {
 
 const LARGE_CHANGE_THRESHOLD = 200;
 
-export function evaluateLargeChange(changedFiles: ChangedFile[]): LargeChangeRuleResult {
+export type LargeChangeRuleOptions = {
+    thresholdLines?: number;
+};
+
+export function evaluateLargeChange(
+    changedFiles: ChangedFile[],
+    options: LargeChangeRuleOptions = {}
+): LargeChangeRuleResult {
     const findings: Finding[] = [];
+    const thresholdLines = options.thresholdLines ?? LARGE_CHANGE_THRESHOLD;
     
     for (const changedFile of changedFiles) {
         const changedLines = changedFile.additions + changedFile.deletions;
 
-        if(changedLines > LARGE_CHANGE_THRESHOLD) {
+        if(changedLines > thresholdLines) {
             findings.push({
                 lane: "fast",
                 pack: "internal",

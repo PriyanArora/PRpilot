@@ -1,11 +1,11 @@
 # Progress
 
-**Active Phase:** P9 — Repository Policy Config (available on request; prior live proof pending)
+**Active Phase:** P9 — Repository Policy Config (local implementation in progress; prior live proof pending)
 **Requested Phase Rule:** The user may ask Codex to work on any phase even when earlier proof is pending.
 **Immediate Next Step:** P9.1 — Reuse and validate the P4 deployment-owner runtime-policy schema before applying repository overrides.
 **Project Category:** systems
 **Last Updated:** 2026-06-06
-**Session Notes:** Flexible phase navigation is enabled. P8 has `P8_README.md`, but no P8 checkbox is complete until live proof is shown. P9 is now the active requested phase. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, and P8 live validation proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
+**Session Notes:** Flexible phase navigation is enabled. P8 has `P8_README.md`, but no P8 checkbox is complete until live proof is shown. P9 local implementation adds repository policy parsing, validation, owner-policy validation, path filtering, threshold overrides, scanner controls, deep opt-in handling, quota caps, owner-cap rejection, local tests, and `P9_README.md`. External P5 GitHub PR proof, live P6 AWS/GitHub proof, live P7 DynamoDB proof, P8 live validation proof, and P9 live repository-policy PR proof remain tracked in `MANUAL_TASKS_CHECKLIST.md`.
 
 > Current action rule: work on the phase or task the user requests. Earlier incomplete proof does not block later phase work.
 > When the student asks "what's next" or runs `/phase-check`, answer with the next useful unchecked step for the active or requested phase plus one plain-language explanation only.
@@ -296,33 +296,33 @@
 
 ---
 
-## P9 — Repository Policy Config `[available on request — prior live proof pending]`
+## P9 — Repository Policy Config `[local implementation complete — external PR proof pending]`
 **Goal:** Support safe per-repository policy overrides without weakening deployment-owner controls.
 
 **Steps:**
-- [ ] P9.1 Reuse and validate the P4 deployment-owner runtime-policy schema before applying repository overrides
-- [ ] P9.2 Define the `.prpilot.yml` schema
-- [ ] P9.2a Hard-code the allowed enum values for `budget_mode`, `draft_behavior`, scanner `mode`, and scanner `lane`
-- [ ] P9.2b Hard-code repository path precedence so `include_paths` filters first and `ignore_paths` wins on overlap
-- [ ] P9.3 Load the deployment-owner runtime policy through the P4 loader path
-- [ ] P9.4 Parse the repository config file
-- [ ] P9.5 Validate the deployment-owner runtime policy
-- [ ] P9.6 Validate the repository config file
-- [ ] P9.7 Apply threshold configuration in rule evaluation
-- [ ] P9.8 Apply ignored-path and include-path configuration in rule evaluation
-- [ ] P9.9 Show clear output for an invalid repo config file
-- [ ] P9.10 Keep default behavior unchanged when the repo file is missing
-- [ ] P9.11 Add scanner policy controls for `enabled`
-- [ ] P9.12 Add scanner policy controls for `mode`
-- [ ] P9.13 Add scanner policy controls for `timeout_ms`, but only as a tighter cap
-- [ ] P9.14 Add lane-placement controls for fast vs deep behavior
-- [ ] P9.15 Add warn-first promotion controls
-- [ ] P9.16 Add manual deep-scan opt-in rules
-- [ ] P9.17 Add automatic deep-on-PR opt-in rules behind deployment-owner allowlists
-- [ ] P9.18 Add per-repo quota controls
-- [ ] P9.19 Reject disallowed lane promotions or hard-cap overrides explicitly instead of silently ignoring them
-- [ ] P9.20 Prove repository policy cannot override deployment-owner hard caps or required security controls
-- [ ] P9.21 Show the required proof cases with two repo configs and one deployment-owner-cap override rejection
+- [x] P9.1 Reuse and validate the P4 deployment-owner runtime-policy schema before applying repository overrides
+- [x] P9.2 Define the `.prpilot.yml` schema
+- [x] P9.2a Hard-code the allowed enum values for `budget_mode`, `draft_behavior`, scanner `mode`, and scanner `lane`
+- [x] P9.2b Hard-code repository path precedence so `include_paths` filters first and `ignore_paths` wins on overlap
+- [x] P9.3 Load the deployment-owner runtime policy through the P4 loader path
+- [x] P9.4 Parse the repository config file
+- [x] P9.5 Validate the deployment-owner runtime policy
+- [x] P9.6 Validate the repository config file
+- [x] P9.7 Apply threshold configuration in rule evaluation
+- [x] P9.8 Apply ignored-path and include-path configuration in rule evaluation
+- [x] P9.9 Show clear output for an invalid repo config file
+- [x] P9.10 Keep default behavior unchanged when the repo file is missing
+- [x] P9.11 Add scanner policy controls for `enabled`
+- [x] P9.12 Add scanner policy controls for `mode`
+- [x] P9.13 Add scanner policy controls for `timeout_ms`, but only as a tighter cap
+- [x] P9.14 Add lane-placement controls for fast vs deep behavior
+- [x] P9.15 Add warn-first promotion controls
+- [x] P9.16 Add manual deep-scan opt-in rules
+- [x] P9.17 Add automatic deep-on-PR opt-in rules behind deployment-owner allowlists
+- [x] P9.18 Add per-repo quota controls
+- [x] P9.19 Reject disallowed lane promotions or hard-cap overrides explicitly instead of silently ignoring them
+- [x] P9.20 Prove repository policy cannot override deployment-owner hard caps or required security controls
+- [x] P9.21 Show the required proof cases with two repo configs and one deployment-owner-cap override rejection
 
 **Proof:** Show two PR runs with different configs, one invalid-config error case, one scanner mode change applied by policy only, one lane assignment change by config, one quota or opt-in policy example, one manual-vs-auto deep opt-in example, and one case proving repo config cannot override a deployment-owner cap.
 

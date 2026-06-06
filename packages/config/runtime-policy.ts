@@ -12,6 +12,11 @@ export type RuntimePolicy = {
     maxAnnotationsPerRun: number; //cap inline GitHub annotations
     maxRunsPerRepoPerDay: number; //per-repo daily quota
     maxRunsPerDayGlobal: number; //whole-instance daily quota
+    maxManualRerunsPerPrPerDay?: number;
+    maxDeepScansPerRepoPerDay?: number;
+    scannerTimeoutMsCap?: number;
+    autoDeepScanEnabled?: boolean;
+    autoDeepScanRepositoryIds?: number[];
 };
 
 //cache TTL (time to live) - how long the cached policy is allowed to be resued
