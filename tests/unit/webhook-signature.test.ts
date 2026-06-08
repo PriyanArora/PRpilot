@@ -45,7 +45,19 @@ describe("invalidWebhookSignature", () => {
         const invalidSignature = `sha256=invalidsignature`;
 
         const isValid = verifyWebhookSignature(rawBody, invalidSignature, secret);
-        
+
+        expect(isValid).toBe(false);
+    });
+
+    it("rejects a same-length signature computed with the wrong secret", () => {
+        const rawBody = JSON.stringify({ action: "opened", number: 1 });
+
+        const signatureWithWrongSecret = `sha256=${createHmac("sha256", "wrong-secret")
+            .update(rawBody)
+            .digest("hex")}`;
+
+        const isValid = verifyWebhookSignature(rawBody, signatureWithWrongSecret, "test-webhook-secret");
+
         expect(isValid).toBe(false);
     });
 

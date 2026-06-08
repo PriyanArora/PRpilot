@@ -13,6 +13,7 @@ tmp/
 .DS_Store
 .idea/
 .vscode/
-exp/
 .codex
+.agents
 codex-folder/
+exp/

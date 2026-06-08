@@ -3,15 +3,15 @@ export type ScannerMode = "off" | "warn" | "block";
 export type Lane = "fast" | "deep";
 
 export type RuntimePolicy = {
-    version: number; //to change policy format later safely
-    updatedAt: string; //when deployment owner last changed the policy
-    budgetMode: BudgetMode; //controls cost behavior
-    selectedRepositoryIds: number[]; //repos this PRPilot instance is allowed to review
-    fastLaneEnabled: boolean; //required review path on/off
-    manualDeepScanEnabled: boolean; //whether users can request optional deep scans
-    maxAnnotationsPerRun: number; //cap inline GitHub annotations
-    maxRunsPerRepoPerDay: number; //per-repo daily quota
-    maxRunsPerDayGlobal: number; //whole-instance daily quota
+    version: number; // policy format version, for safe future migrations
+    updatedAt: string; // when the deployment owner last changed the policy
+    budgetMode: BudgetMode; // controls cost behavior
+    selectedRepositoryIds: number[]; // repos this PRPilot instance may review
+    fastLaneEnabled: boolean; // required review path on/off
+    manualDeepScanEnabled: boolean; // allow users to request optional deep scans
+    maxAnnotationsPerRun: number; // cap on inline GitHub annotations
+    maxRunsPerRepoPerDay: number; // per-repo daily quota
+    maxRunsPerDayGlobal: number; // whole-instance daily quota
     maxManualRerunsPerPrPerDay?: number;
     maxDeepScansPerRepoPerDay?: number;
     scannerTimeoutMsCap?: number;
@@ -19,21 +19,20 @@ export type RuntimePolicy = {
     autoDeepScanRepositoryIds?: number[];
 };
 
-//cache TTL (time to live) - how long the cached policy is allowed to be resued
-//using it so every webhook doesnt have to pull the policy everytime, can reuse and if cannot pull a new one after TTL has passed, show failed
-//runtime policy load result can be one of the following two shapes
-export type RuntimePolicyLoadResult = 
-    |{ 
-        ok: true; //policy loaded successfully
-        policy : RuntimePolicy; //the actual config
-        loadedAt: string; //when it was loaded
-        cacheTtlSeconds: number; //how long it may be reused
-    }|{ 
-        ok: false; //loading failed
-        error: string; //why it failed
+// Result of loading the runtime policy. On success it carries a cache TTL so callers can
+// reuse the policy instead of fetching it on every webhook, refreshing once the TTL lapses.
+export type RuntimePolicyLoadResult =
+    | {
+        ok: true;
+        policy: RuntimePolicy;
+        loadedAt: string;
+        cacheTtlSeconds: number;
+    }
+    | {
+        ok: false;
+        error: string;
     };
 
-
 export type RuntimePolicyLoader = {
-    loadRuntimePolicy: () => Promise<RuntimePolicyLoadResult>; //function (expected to be async when ill implement it) that takes no param and returns a promise
+    loadRuntimePolicy: () => Promise<RuntimePolicyLoadResult>;
 };

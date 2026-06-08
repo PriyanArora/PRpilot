@@ -1,15 +1,15 @@
 import { createServer } from "node:http";
-import { createHmac } from "node:crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 
 const port = Number(process.env.PORT ?? "3000");
 
-//handler to verify the webhook signature using the secret and the raw body of the request
+// Verify the webhook signature with a constant-time comparison of the HMAC over the raw body.
 const verifyWebhookSignature = (rawBody, signature, secret) => {
-    const expectedSignature = `sha256=${createHmac("sha256", secret)
-      .update(rawBody)
-      .digest("hex")}`;
+    const expectedSignature = `sha256=${createHmac("sha256", secret).update(rawBody).digest("hex")}`;
+    const expected = Buffer.from(expectedSignature);
+    const received = Buffer.from(signature);
 
-    return signature === expectedSignature;
+    return expected.length === received.length && timingSafeEqual(expected, received);
 };
 
 //helper method to reject unauthorized requests
