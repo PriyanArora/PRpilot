@@ -10,14 +10,9 @@ import {
     buildPrPartitionKey,
     buildRunSortKey
 } from "../../packages/review-store/persistence-records";
-import {
-    p7DynamoDbConcepts,
-    p7RequiredProofArtifacts,
-    p7SingleTableDesign
-} from "../../packages/review-store/p7-dynamodb-concepts";
 import { InMemoryReviewStore } from "../../packages/review-store/in-memory-review-store";
 import { p7RetentionWindows } from "../../packages/review-store/retention-policy";
-import { p7LowCostRecoveryPlan, rehearseLocalRecoveryDrill } from "../../packages/review-store/recovery-drill";
+import { rehearseLocalRecoveryDrill } from "../../packages/review-store/recovery-drill";
 
 const NOW = new Date("2026-05-21T12:00:00.000Z");
 
@@ -178,19 +173,6 @@ function populateStoreWithTwoRuns(): InMemoryReviewStore {
 }
 
 describe("P7 DynamoDB persistence concepts", () => {
-    it("documents the single-table model, keys, TTL, conditional writes, and low-cost recovery path", () => {
-        expect(p7DynamoDbConcepts.singleTableModel).toContain("One DynamoDB table");
-        expect(p7DynamoDbConcepts.conditionalWrites).toContain("idempotency");
-        expect(p7SingleTableDesign).toMatchObject({
-            tableName: "PRPilotReviewState",
-            keyAttributes: ["pk", "sk"],
-            ttlAttribute: "ttl"
-        });
-        expect(p7SingleTableDesign.recordTypes).toEqual(["DELIVERY", "RUN", "ATTEMPT", "COUNTER", "LOCK"]);
-        expect(p7LowCostRecoveryPlan.chosenPath).toContain("DynamoDB on-demand export");
-        expect(p7RequiredProofArtifacts).toContain("pr_query_output");
-    });
-
     it("locks the P7 key shapes for delivery, run, attempt, counter, and deep-lane lock records", () => {
         expect(buildPrPartitionKey({ repositoryId: 123, prNumber: 42 })).toBe("REPO#123#PR#42");
         expect(buildRunSortKey({

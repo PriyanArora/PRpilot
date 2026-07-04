@@ -1,19 +1,35 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
 build/
 coverage/
 *.tsbuildinfo
+cdk.out/
+
+# Secrets & environment
 .env
 .env.*
 !.env.example
-cdk.out/
+
+# Logs & temp
 *.log
 tmp/
 .tmp/
+
+# Editor / OS
 .DS_Store
 .idea/
 .vscode/
-.codex
+
+# Tooling / agents
+.claude
 .agents
-codex-folder/
+
+# Project planning docs (kept local, read later)
+claude-folder/
 exp/
+
+# CI / GitHub Actions (managed manually, not committed for now)
+.github/

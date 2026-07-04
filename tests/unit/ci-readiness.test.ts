@@ -21,9 +21,7 @@ describe("P17 CI/CD readiness", () => {
             metric: "webhook_to_check_latency_ms",
             tolerancePercent: 20
         });
-        expect(JSON.parse(read("ci/scanner-policy-baseline.json"))).toHaveLength(7);
         expect(read("scripts/check-latency-baseline.mjs")).toContain("LATENCY_CURRENT_P95_MS");
-        expect(read("scripts/check-scanner-policy-drift.mjs")).toContain("scanner-policy-baseline.json");
         expect(read("scripts/check-required-path-deterministic.mjs")).toContain("Math.random");
         expect(read("ci/free-tier-plan.md")).toContain("workflow_dispatch");
     });

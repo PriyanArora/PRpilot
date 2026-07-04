@@ -46,6 +46,21 @@ describe("internal.large-change", () => {
         expect(result.findings[0]?.fingerprint).toBe("internal.large-change:src/big-file.ts");
         expectCompletedInternalCoverage(result.coverage);
     });
+
+    it("does not flag lockfiles, whose large auto-generated diffs are expected noise", () => {
+        const changedFiles: ChangedFile[] = [
+            {
+                path: "package-lock.json",
+                status: "modified",
+                additions: 900,
+                deletions: 120
+            }
+        ];
+
+        const result = evaluateLargeChange(changedFiles);
+
+        expect(result.findings).toHaveLength(0);
+    });
 });
 
 describe("internal.sensitive-file-change", () => {

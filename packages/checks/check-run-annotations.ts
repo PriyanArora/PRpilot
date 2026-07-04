@@ -1,7 +1,10 @@
 import type { Lane } from "../config/runtime-policy";
-import type { Finding, FindingBlockability } from "../rules/finding";
+import type { Finding, FindingBlockability, FindingSeverity } from "../rules/finding";
 
 export type CheckRunAnnotationLevel = "failure" | "warning" | "notice";
+
+// GitHub caps annotation titles at 255 characters.
+const ANNOTATION_TITLE_MAX_LENGTH = 255;
 
 export type CheckRunAnnotation = {
     path: string;
@@ -9,9 +12,12 @@ export type CheckRunAnnotation = {
     end_line: number;
     annotation_level: CheckRunAnnotationLevel;
     message: string;
+    title?: string;
+    raw_details?: string;
     fingerprint: string;
     lane: Lane;
     blockability: FindingBlockability;
+    severity: FindingSeverity;
     scanner: string;
 };
 
@@ -26,6 +32,13 @@ const SCANNER_PRIORITY: Record<string, number> = {
     actionlint: 1,
     internal: 2,
     eslint: 3
+};
+
+const SEVERITY_RANK: Record<FindingSeverity, number> = {
+    critical: 0,
+    high: 1,
+    medium: 2,
+    low: 3
 };
 
 function getBlockabilityRank(blockability: FindingBlockability): number {
@@ -63,9 +76,14 @@ export function buildAnnotationFromFinding(finding: Finding): CheckRunAnnotation
         end_line: finding.end_line ?? finding.start_line,
         annotation_level: getAnnotationLevel(finding.blockability),
         message: finding.message,
+        // title names the source rule so a reader can tell which scanner flagged what.
+        title: `${finding.scanner}: ${finding.rule_id}`.slice(0, ANNOTATION_TITLE_MAX_LENGTH),
+        // raw_details carries the scanner's raw reference when present.
+        ...(finding.raw_reference === undefined ? {} : { raw_details: finding.raw_reference }),
         fingerprint: finding.fingerprint,
         lane: finding.lane,
         blockability: finding.blockability,
+        severity: finding.severity,
         scanner: finding.scanner
     };
 }
@@ -91,6 +109,13 @@ export function rankAnnotations(annotations: CheckRunAnnotation[]): CheckRunAnno
         const blockabilityRank = getBlockabilityRank(left.blockability) - getBlockabilityRank(right.blockability);
         if (blockabilityRank !== 0) {
             return blockabilityRank;
+        }
+
+        // Severity decides ordering next so the annotation cap never drops a
+        // higher-severity finding in favor of a lower-severity one.
+        const severityRank = SEVERITY_RANK[left.severity] - SEVERITY_RANK[right.severity];
+        if (severityRank !== 0) {
+            return severityRank;
         }
 
         const laneRank = (left.lane === "fast" ? 0 : 1) - (right.lane === "fast" ? 0 : 1);

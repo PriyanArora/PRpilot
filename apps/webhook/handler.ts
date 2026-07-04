@@ -2,6 +2,7 @@ import {createHmac, timingSafeEqual} from "node:crypto";
 import { buildReviewJob, type ReviewJob, type ReviewJobTrigger } from "../../packages/queue/review-job";
 import type { DurableReviewQueue, ReviewQueueSendResult } from "../../packages/queue/review-queue";
 import type { Lane } from "../../packages/config/runtime-policy";
+import { publishQueuedCheckRun, type SyncCheckRunStore } from "../../packages/checks/sync-check-publisher";
 
 // Confirm the request really came from GitHub: recompute the HMAC over the raw body
 // with our shared secret and compare it to the signature header. The comparison is
@@ -106,6 +107,9 @@ export async function enqueueReviewJobFromWebhook(input: {
     trigger: ReviewJobTrigger;
     queue: DurableReviewQueue;
     now?: Date;
+    // When provided, an in_progress check is published immediately so PRPilot appears
+    // on the PR within seconds instead of only after the queue round-trip.
+    checkRunStore?: SyncCheckRunStore;
 }): Promise<WebhookQueueHandoffResult | { statusCode: 204; acknowledged: false; reason: "not_review_event" }> {
     const now = input.now ?? new Date();
     const job = buildReviewJobFromNormalizedEvent(input.event, input.lane, input.trigger, now);
@@ -116,6 +120,15 @@ export async function enqueueReviewJobFromWebhook(input: {
             acknowledged: false,
             reason: "not_review_event"
         };
+    }
+
+    if (input.checkRunStore !== undefined) {
+        publishQueuedCheckRun(input.checkRunStore, {
+            repositoryId: job.repositoryId,
+            lane: job.lane,
+            prNumber: job.prNumber,
+            headSha: job.headSha
+        });
     }
 
     try {

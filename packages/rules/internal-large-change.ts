@@ -9,6 +9,16 @@ export type LargeChangeRuleResult = {
 
 const LARGE_CHANGE_THRESHOLD = 200;
 
+// Lockfiles and generated files routinely produce huge, auto-generated diffs; a
+// large diff there is expected noise, not hand-written code worth flagging.
+// package.json/package-lock.json drift is covered separately by internal.lockfile-drift.
+const GENERATED_FILE_PATHS = new Set<string>([
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "npm-shrinkwrap.json"
+]);
+
 export type LargeChangeRuleOptions = {
     thresholdLines?: number;
 };
@@ -19,8 +29,12 @@ export function evaluateLargeChange(
 ): LargeChangeRuleResult {
     const findings: Finding[] = [];
     const thresholdLines = options.thresholdLines ?? LARGE_CHANGE_THRESHOLD;
-    
+
     for (const changedFile of changedFiles) {
+        if (GENERATED_FILE_PATHS.has(changedFile.path)) {
+            continue;
+        }
+
         const changedLines = changedFile.additions + changedFile.deletions;
 
         if(changedLines > thresholdLines) {

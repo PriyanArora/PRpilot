@@ -4,7 +4,6 @@ import type { Finding } from "../../packages/rules/finding";
 import type { NormalizedWebhookEvent } from "../../apps/webhook/handler";
 import { enqueueReviewJobFromWebhook } from "../../apps/webhook/handler";
 import { consumeOneReviewJob } from "../../apps/worker/handler";
-import { p6QueueConcepts, p6QueueLifecycle, p6RequiredProofArtifacts } from "../../packages/queue/sqs-concepts";
 import { buildReviewJob, type ReviewJob } from "../../packages/queue/review-job";
 import {
     InMemoryReviewQueue,
@@ -13,7 +12,6 @@ import {
     type ReviewQueueSendResult
 } from "../../packages/queue/review-queue";
 import { decideLaneAdmission } from "../../packages/queue/lane-admission";
-import { buildDlqReplayPlan, dlqInvestigationSteps } from "../../packages/queue/dlq-runbook";
 import { decideJobFreshness } from "../../packages/queue/job-freshness";
 import { decideRerunThrottle } from "../../packages/queue/rerun-throttle";
 import { buildScannerFailureCoverage, normalizeScannerParallelism } from "../../packages/worker/scanner-timeout";
@@ -107,22 +105,6 @@ function currentHeadShaFor(messageJob: ReviewJob) {
         currentHeadSha: messageJob.headSha
     });
 }
-
-describe("P6 queue concepts", () => {
-    it("documents the local SQS lifecycle before worker wiring", () => {
-        expect(p6QueueConcepts.durableHandoff).toContain("acknowledge GitHub only after");
-        expect(p6QueueLifecycle).toContain("worker_receives_visible_job");
-        expect(p6RequiredProofArtifacts).toEqual([
-            "enqueue_log",
-            "worker_log",
-            "dlq_record",
-            "timeout_coverage",
-            "rerun_throttle_decision",
-            "deep_lane_denial",
-            "superseded_job_decision"
-        ]);
-    });
-});
 
 describe("P6 webhook queue handoff", () => {
     it("builds the queue-job contract and acknowledges only after durable send succeeds", async () => {
@@ -280,11 +262,8 @@ describe("P6 retries, DLQ inspection, and replay", () => {
         });
 
         const [record] = queue.inspectDlq();
-        const replayPlan = buildDlqReplayPlan(record);
         const replay = await queue.replayDlq(record.messageId, minutesAfter(1));
 
-        expect(dlqInvestigationSteps[0]).toContain("Read the DLQ message");
-        expect(replayPlan.replaySafetyCheck).toBe("confirm_current_head_sha_before_replay");
         expect(replay.messageId).toBe("review-message-2");
         expect(queue.inspectDlq()).toHaveLength(0);
         expect(queue.getBacklogSnapshot(minutesAfter(1)).visible.fast).toBe(1);

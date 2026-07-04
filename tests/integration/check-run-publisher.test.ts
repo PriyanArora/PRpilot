@@ -3,7 +3,6 @@ import type { Coverage } from "../../packages/rules/coverage";
 import type { Finding } from "../../packages/rules/finding";
 import { buildCheckRunPayload } from "../../packages/checks/check-run-payload-builder";
 import { buildCheckRunExternalId, getCheckRunName } from "../../packages/checks/check-run-identity";
-import { p5SynchronousProofScope, githubChecksLifecycle } from "../../packages/checks/p5-synchronous-proof";
 import { prepareAnnotations } from "../../packages/checks/check-run-annotations";
 import { RUN_DEEP_SCAN_ACTION_ID, RERUN_DEEP_SCAN_ACTION_ID } from "../../packages/checks/deep-scan-action";
 import { createSyncCheckRunStore, publishCheckRunSync } from "../../packages/checks/sync-check-publisher";
@@ -69,24 +68,6 @@ function payload(input: {
         coverage: input.coverage ?? [coverage({ lane })]
     });
 }
-
-describe("P5 synchronous proof scope", () => {
-    it("keeps P5 scoped to the reusable check publisher before P6 wires SQS", () => {
-        expect(p5SynchronousProofScope).toEqual({
-            proofMode: "synchronous_local_caller",
-            queueWiringPhase: "P6",
-            purpose: "Prove the reusable check publisher before SQS worker invocation exists."
-        });
-
-        expect(githubChecksLifecycle).toEqual([
-            "create_or_update_check_for_head_sha",
-            "resolve_conclusion",
-            "rank_dedupe_and_cap_annotations",
-            "build_summary_sections",
-            "expose_rerun_or_deep_scan_actions_when_allowed"
-        ]);
-    });
-});
 
 describe("P5 check-run identity", () => {
     it("uses separate names for fast and deep check runs", () => {

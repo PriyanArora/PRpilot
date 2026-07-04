@@ -1,5 +1,6 @@
+import type { Lane } from "../config/runtime-policy";
 import type { CheckRunPayloadInput } from "../rules/check-run-payload-input";
-import { buildCheckRunExternalId } from "./check-run-identity";
+import { buildCheckRunExternalId, getCheckRunName } from "./check-run-identity";
 import { prepareAnnotations } from "./check-run-annotations";
 import type { CheckRunAnnotation } from "./check-run-annotations";
 import { buildCheckRunSummary } from "./check-run-summary";
@@ -17,8 +18,8 @@ export type PublishedCheckRun = {
     externalId: string;
     name: string;
     headSha: string;
-    conclusion: CheckRunPayloadInput["conclusion"];
-    status: "completed";
+    conclusion: CheckRunPayloadInput["conclusion"] | null;
+    status: "queued" | "in_progress" | "completed";
     summary: string;
     annotations: CheckRunAnnotation[];
     overflowAnnotations: CheckRunAnnotation[];
@@ -58,7 +59,7 @@ export function publishCheckRunSync(
     const summary = buildCheckRunSummary({
         payload: input.payload,
         inlineAnnotationCount: preparedAnnotations.inlineAnnotations.length,
-        overflowAnnotationCount: preparedAnnotations.overflowAnnotations.length,
+        overflowAnnotations: preparedAnnotations.overflowAnnotations,
         appliedLimits: input.appliedLimits ?? [],
         deepScanAvailable: actions.includes("run_deep_scan")
     });
@@ -73,6 +74,48 @@ export function publishCheckRunSync(
         annotations: preparedAnnotations.inlineAnnotations,
         overflowAnnotations: preparedAnnotations.overflowAnnotations,
         actions
+    };
+
+    const operation = store.has(externalId) ? "updated" : "created";
+    store.set(externalId, checkRun);
+
+    return {
+        operation,
+        checkRun
+    };
+}
+
+export type QueuedCheckRunInput = {
+    repositoryId: number;
+    lane: Lane;
+    prNumber: number;
+    headSha: string;
+};
+
+// Published at webhook ingress so the developer sees PRPilot pick up the PR within
+// seconds. No review runs here — it is a status-only placeholder that the worker
+// later updates to "completed" via publishCheckRunSync under the same external id.
+export function publishQueuedCheckRun(
+    store: SyncCheckRunStore,
+    input: QueuedCheckRunInput
+): SyncCheckPublisherResult {
+    const externalId = buildCheckRunExternalId({
+        repositoryId: input.repositoryId,
+        prNumber: input.prNumber,
+        lane: input.lane,
+        headSha: input.headSha
+    });
+
+    const checkRun: PublishedCheckRun = {
+        externalId,
+        name: getCheckRunName(input.lane),
+        headSha: input.headSha,
+        conclusion: null,
+        status: "in_progress",
+        summary: "Analyzing…",
+        annotations: [],
+        overflowAnnotations: [],
+        actions: []
     };
 
     const operation = store.has(externalId) ? "updated" : "created";
