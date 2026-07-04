@@ -6,7 +6,7 @@
 
 *Self-hosted. Free-tier first. Deterministic. Honest when it can't help.*
 
-![status](https://img.shields.io/badge/status-MVP-blue)
+![status](https://img.shields.io/badge/status-in%20development-orange)
 ![runtime](https://img.shields.io/badge/runtime-Node.js%2022-green)
 ![infra](https://img.shields.io/badge/infra-AWS%20CDK-orange)
 ![cost](https://img.shields.io/badge/target%20cost-%240--%245%2Fmo-brightgreen)
@@ -25,6 +25,10 @@ It's meant for students and early-career developers who don't have a senior engi
 The whole thing is built to live inside the AWS free tier. The default target is roughly **$0 to $5 a month** per instance, and there's a hard **$10** ceiling it won't quietly blow past.
 
 One rule sits above everything else: if PRPilot can't honestly review your PR, it says so with a blocking check. It never pretends the review passed when it didn't.
+
+### A note on status
+
+Heads up before you read the rest as if it all works today: this codebase was restored from a deleted state, so it's a work in progress, not something to point at production yet. The review logic and the AWS infrastructure both exist and are covered by tests (114 cases across 16 files at the moment), but the last mile isn't connected. The CDK stack currently deploys placeholder Lambdas while the real webhook and worker handlers get wired into them. So most of what follows describes where the project is headed and what's already built toward it, and it's under active development.
 
 ---
 
@@ -176,6 +180,8 @@ npx cdk deploy
 ```
 
 Copy the `WebhookUrl` output into your GitHub App's webhook settings, then open a test PR in the selected repo.
+
+Worth repeating from the status note above: the Lambdas this stack deploys are still placeholders. Deploying gives you the full AWS shape and a webhook that acknowledges deliveries, but the real review logic in `apps/` isn't bundled into the functions yet. That wiring is the current work in progress.
 
 Full walkthrough: [`docs/self-host-quickstart.md`](docs/self-host-quickstart.md) and [`docs/github-app-and-aws-setup.md`](docs/github-app-and-aws-setup.md).
 
