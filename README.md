@@ -28,7 +28,7 @@ One rule sits above everything else: if PRPilot can't honestly review your PR, i
 
 ### A note on status
 
-Heads up before you read the rest as if it all works today: this codebase was restored from a deleted state, so it's a work in progress, not something to point at production yet. The review logic and the AWS infrastructure both exist and are covered by tests (114 cases across 16 files at the moment), but the last mile isn't connected. The CDK stack currently deploys placeholder Lambdas while the real webhook and worker handlers get wired into them. So most of what follows describes where the project is headed and what's already built toward it, and it's under active development.
+Heads up before you read the rest as if it all works today: this codebase was restored from a deleted state, so it's a work in progress, not something to point at production yet. The review logic and the AWS infrastructure both exist and are covered by tests (121 cases across 16 files at the moment), but the last mile isn't connected. The CDK stack currently deploys placeholder Lambdas while the real webhook and worker handlers get wired into them. So most of what follows describes where the project is headed and what's already built toward it, and it's under active development.
 
 ---
 
@@ -250,6 +250,18 @@ npm run typecheck            # tsc --noEmit
 npm run ci:latency           # check the latency baseline
 npm run ci:deterministic     # verify the required path stays deterministic
 ```
+
+---
+
+## Recent additions
+
+*July 2026:*
+
+- **Internal review engine wired end-to-end** (`packages/rules/internal-fast-lane-review.ts`, `packages/worker/process-review-job.ts`). The three internal rules previously only ran in unit tests; there was no production path from a review job to a published check. `runInternalFastLaneReview` runs all rules over the changed files with a measured duration and fails closed (a throwing rule reports `failed` coverage → `action_required`, never a false pass). `createInternalReviewProcessor` turns that into the `ReviewJobProcessor` the worker consumes, closing the webhook → queue → worker → check-run loop. Covered by `tests/integration/internal-review-pipeline.test.ts`.
+- **Finding delta across pushes** (`packages/checks/finding-delta.ts`). Check runs now store their finding fingerprints, and a new push on the same PR gets a "**Since last push:** N new, M resolved, K persisting" line in the summary — so a developer sees what their fix actually changed instead of re-reading the whole list.
+- **Sensitive-file rule hardened.** It flagged `.env.example` but missed real `.env`/`.env.production` files and private keys (`.pem`, `.key`, `id_rsa`, …). Those are now caught at `high` severity, templates stay `medium`, and each finding names *why* the path is sensitive ("environment file", "private key material", "CI workflow", …).
+- **Lockfile drift covers all lockfiles and both directions.** yarn/pnpm/shrinkwrap lockfiles now satisfy a `package.json` change, and the reverse case — a lockfile edited with no manifest change — produces a warning, since that often means a hand-edited lockfile.
+- **Whole-PR size check.** A PR made of many medium-sized files could dodge the 200-line per-file threshold; totals over 800 changed lines now warn once ("consider splitting it"). Per-file messages also state the threshold they tripped.
 
 ---
 
