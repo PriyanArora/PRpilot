@@ -28,7 +28,7 @@ One rule sits above everything else: if PRPilot can't honestly review your PR, i
 
 ### A note on status
 
-Heads up before you read the rest as if it all works today: this codebase was restored from a deleted state, so it's a work in progress, not something to point at production yet. The review logic and the AWS infrastructure both exist and are covered by tests (121 cases across 16 files at the moment), but the last mile isn't connected. The CDK stack currently deploys placeholder Lambdas while the real webhook and worker handlers get wired into them. So most of what follows describes where the project is headed and what's already built toward it, and it's under active development.
+Heads up before you read the rest as if it all works today: this codebase was restored from a deleted state, so it's a work in progress, not something to point at production yet. The review logic and the AWS infrastructure both exist and are covered by tests (117 cases across 16 files at the moment), but the last mile isn't connected. The CDK stack currently deploys placeholder Lambdas while the real webhook and worker handlers get wired into them. So most of what follows describes where the project is headed and what's already built toward it, and it's under active development.
 
 ---
 

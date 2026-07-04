@@ -1,7 +1,5 @@
 import type { BudgetMode, RuntimePolicy } from "../config/runtime-policy";
 
-export type LiveDeploymentEnv = Record<string, string | undefined>;
-
 export type ValidationReport = {
     ok: boolean;
     errors: string[];
@@ -59,61 +57,10 @@ export type RollbackTiming = {
     meetsFiveMinuteTarget: boolean;
 };
 
-export const requiredLiveEnvKeys = [
-    "AWS_REGION",
-    "GITHUB_APP_ID",
-    "GITHUB_WEBHOOK_SECRET_PARAM",
-    "GITHUB_PRIVATE_KEY_PARAM",
-    "PRPILOT_RUNTIME_POLICY_PARAM",
-    "DYNAMODB_TABLE_NAME",
-    "SQS_QUEUE_URL"
-] as const;
+// Live env validation lives in scripts/validate-live-config.mjs (the executable
+// deploy:validate-config path) — one owner, no drift.
 
 export const scannerPackRolloutOrder: ScannerPack[] = ["pack1", "pack2", "pack3"];
-
-export function validateLiveDeploymentEnv(env: LiveDeploymentEnv): ValidationReport {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-
-    for (const key of requiredLiveEnvKeys) {
-        if (env[key] === undefined || env[key]?.trim() === "") {
-            errors.push(`${key} is required`);
-        }
-    }
-
-    for (const key of [
-        "GITHUB_WEBHOOK_SECRET_PARAM",
-        "GITHUB_PRIVATE_KEY_PARAM",
-        "PRPILOT_RUNTIME_POLICY_PARAM"
-    ] as const) {
-        const value = env[key];
-        if (value !== undefined && !value.startsWith("/")) {
-            errors.push(`${key} must be an SSM Parameter Store name, not a secret value`);
-        }
-    }
-
-    if (env.GITHUB_PRIVATE_KEY_PARAM?.includes("BEGIN")) {
-        errors.push("GITHUB_PRIVATE_KEY_PARAM appears to contain a private key value");
-    }
-
-    if (env.GITHUB_WEBHOOK_SECRET_PARAM !== undefined && env.GITHUB_WEBHOOK_SECRET_PARAM.length > 256) {
-        warnings.push("GITHUB_WEBHOOK_SECRET_PARAM is unusually long for a parameter name");
-    }
-
-    if (env.AWS_REGION !== undefined && !/^[a-z]{2}-[a-z]+-\d$/.test(env.AWS_REGION)) {
-        errors.push("AWS_REGION must look like an AWS region, for example us-east-1");
-    }
-
-    if (env.SQS_QUEUE_URL !== undefined && !env.SQS_QUEUE_URL.startsWith("https://sqs.")) {
-        errors.push("SQS_QUEUE_URL must look like an SQS queue URL");
-    }
-
-    return {
-        ok: errors.length === 0,
-        errors,
-        warnings
-    };
-}
 
 export function validateSelectedRepositoryScope(input: SelectedRepositoryScopeInput): ValidationReport {
     const installed = new Set(input.installedRepositoryIds);

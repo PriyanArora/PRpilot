@@ -8,7 +8,6 @@ import {
     scannerPackRolloutOrder,
     validateCostControls,
     validateDeepScanDefaults,
-    validateLiveDeploymentEnv,
     validateScannerPackPromotion,
     validateSelectedRepositoryScope
 } from "../../packages/deployment/deployment-validation";
@@ -27,8 +26,16 @@ const runtimePolicy: RuntimePolicy = {
 };
 
 describe("P15 live config validation", () => {
-    it("accepts Parameter Store names and deployed output values without secrets", () => {
-        expect(validateLiveDeploymentEnv({
+    // The validator lives in the executable deploy:validate-config script (ESM),
+    // so a CommonJS test file has to import it dynamically.
+    async function loadValidateLiveConfig() {
+        const { validateLiveConfig } = await import("../../scripts/validate-live-config.mjs");
+        return validateLiveConfig;
+    }
+
+    it("accepts Parameter Store names and deployed output values without secrets", async () => {
+        const validateLiveConfig = await loadValidateLiveConfig();
+        expect(validateLiveConfig({
             AWS_REGION: "us-east-1",
             GITHUB_APP_ID: "12345",
             GITHUB_WEBHOOK_SECRET_PARAM: "/prpilot/prod/github/webhook-secret",
@@ -43,8 +50,9 @@ describe("P15 live config validation", () => {
         });
     });
 
-    it("rejects missing config and secret-looking values", () => {
-        expect(validateLiveDeploymentEnv({
+    it("rejects missing config and secret-looking values", async () => {
+        const validateLiveConfig = await loadValidateLiveConfig();
+        expect(validateLiveConfig({
             AWS_REGION: "not-a-region",
             GITHUB_APP_ID: "",
             GITHUB_WEBHOOK_SECRET_PARAM: "plain-secret",

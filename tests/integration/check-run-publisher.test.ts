@@ -6,11 +6,6 @@ import { buildCheckRunExternalId, getCheckRunName } from "../../packages/checks/
 import { prepareAnnotations } from "../../packages/checks/check-run-annotations";
 import { RUN_DEEP_SCAN_ACTION_ID, RERUN_DEEP_SCAN_ACTION_ID } from "../../packages/checks/deep-scan-action";
 import { createSyncCheckRunStore, publishCheckRunSync } from "../../packages/checks/sync-check-publisher";
-import {
-    buildDeepLaneDenialProof,
-    buildDegradedFastLaneProof,
-    buildFailingFastLaneProof
-} from "../../packages/checks/p5-proof-scenarios";
 
 function coverage(overrides: Partial<Coverage> = {}): Coverage {
     const lane = overrides.lane ?? "fast";
@@ -332,7 +327,12 @@ describe("P5 published summary and manual actions", () => {
 
 describe("P5 local proof scenarios", () => {
     it("shows a failing fast-lane proof run", () => {
-        const result = buildFailingFastLaneProof();
+        const result = publishCheckRunSync(createSyncCheckRunStore(), {
+            repositoryId: 123,
+            payload: payload({ findings: [finding({ blockability: "block" })] }),
+            annotationCap: 20,
+            policyAllowsDeepScan: true
+        });
 
         expect(result.operation).toBe("created");
         expect(result.checkRun.conclusion).toBe("failure");
@@ -340,7 +340,13 @@ describe("P5 local proof scenarios", () => {
     });
 
     it("shows a degraded fast-lane proof run", () => {
-        const result = buildDegradedFastLaneProof();
+        const result = publishCheckRunSync(createSyncCheckRunStore(), {
+            repositoryId: 123,
+            payload: payload({ coverage: [coverage({ status: "failed" })] }),
+            annotationCap: 20,
+            policyAllowsDeepScan: true,
+            appliedLimits: ["scanner_failed"]
+        });
 
         expect(result.checkRun.conclusion).toBe("action_required");
         expect(result.checkRun.summary).toContain("Coverage gaps: 1");
@@ -348,7 +354,17 @@ describe("P5 local proof scenarios", () => {
     });
 
     it("shows an optional deep-lane denial proof run", () => {
-        const result = buildDeepLaneDenialProof();
+        const result = publishCheckRunSync(createSyncCheckRunStore(), {
+            repositoryId: 123,
+            payload: payload({
+                lane: "deep",
+                findings: [finding({ lane: "deep", blockability: "warn" })],
+                coverage: [coverage({ lane: "deep", status: "denied_by_limit" })]
+            }),
+            annotationCap: 20,
+            policyAllowsDeepScan: true,
+            appliedLimits: ["deep_lane_denied_by_limit"]
+        });
 
         expect(result.checkRun.conclusion).toBe("neutral");
         expect(result.checkRun.name).toBe("PRPilot Deep");

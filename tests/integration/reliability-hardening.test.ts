@@ -1,12 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-    budgetSheddingOrder,
     buildBoundedRetryPolicy,
-    cautiousLicenseBoundaries,
     decideBudgetModeFromQuota,
     decideBudgetShedding,
-    mapReliabilityOutcomeToRunbookStep,
-    reliabilityAlarmPlan,
     simulateSyntheticBurst,
     validateLowConcurrencySettings
 } from "../../packages/queue/reliability-hardening";
@@ -112,11 +108,6 @@ describe("P13 burst and budget-mode behavior", () => {
     });
 
     it("applies the lane-specific budget-shedding order", () => {
-        expect(budgetSheddingOrder).toEqual([
-            "deny_optional_deep_lane",
-            "reduce_presentation_volume",
-            "report_required_path_gaps_as_action_required"
-        ]);
         expect(decideBudgetShedding("conserve", "deep")).toMatchObject({
             allowWork: false,
             reason: "deny_optional_deep"
@@ -130,47 +121,5 @@ describe("P13 burst and budget-mode behavior", () => {
             presentation: "minimal",
             requiredPathCoverageBehavior: "action_required_if_gap"
         });
-    });
-});
-
-describe("P13 alarms, runbooks, and license boundaries", () => {
-    it("defines the minimal reliability alarm set and operational actions", () => {
-        expect(reliabilityAlarmPlan.map((alarm) => alarm.name)).toEqual([
-            "DlqHasMessagesAlarm",
-            "WebhookFunctionErrorsAlarm",
-            "WorkerFunctionErrorsAlarm",
-            "WorkerFunctionThrottlesAlarm",
-            "ReviewQueueAgeAlarm",
-            "BudgetModeTransitionAlarm"
-        ]);
-        expect(reliabilityAlarmPlan[0].action).toContain("Inspect the DLQ record");
-    });
-
-    it("maps reliability outcomes to explicit runbook steps", () => {
-        expect(mapReliabilityOutcomeToRunbookStep("scanner_timeout")).toContain("action_required");
-        expect(mapReliabilityOutcomeToRunbookStep("scanner_failure")).toContain("worker logs");
-        expect(mapReliabilityOutcomeToRunbookStep("oversized_run")).toContain("oversized-run");
-        expect(mapReliabilityOutcomeToRunbookStep("unsupported_repo")).toContain("unsupported-repo");
-        expect(mapReliabilityOutcomeToRunbookStep("quota_exhaustion")).toContain("Deny optional work");
-        expect(mapReliabilityOutcomeToRunbookStep("partial_coverage")).toContain("required-path gaps");
-        expect(mapReliabilityOutcomeToRunbookStep("github_failed_delivery")).toContain("redelivery");
-    });
-
-    it("keeps AGPL and GPL tools disabled by default behind explicit approval boundaries", () => {
-        expect(cautiousLicenseBoundaries).toHaveLength(2);
-        expect(cautiousLicenseBoundaries).toEqual([
-            {
-                licenseFamily: "AGPL",
-                defaultEnabled: false,
-                approvalRequired: true,
-                boundary: "Do not link, import, vendor, or modify AGPL code in the PRPilot runtime; require owner approval and isolated process execution before any optional use."
-            },
-            {
-                licenseFamily: "GPL",
-                defaultEnabled: false,
-                approvalRequired: true,
-                boundary: "Do not link, import, vendor, or modify GPL code in the PRPilot runtime; require owner approval and isolated process execution before any optional use."
-            }
-        ]);
     });
 });

@@ -62,11 +62,10 @@ export type PackBudgetSample = {
     budgetMs: number;
 };
 
-export type ObservabilityAlarmThreshold = {
-    name: string;
-    threshold: string;
-    action: string;
-};
+// Alarm thresholds, the observability plan, and the Logs Insights query live in
+// docs/operations-runbook.md — operator prose, not runtime data. These stay
+// because validateMetricCardinality enforces them.
+export const MAX_DIMENSIONS_PER_METRIC = 3;
 
 export const forbiddenMetricDimensions = [
     "deliveryId",
@@ -75,49 +74,6 @@ export const forbiddenMetricDimensions = [
     "prNumber",
     "headSha"
 ] as const;
-
-export const freeTierObservabilityPlan = {
-    logRetentionDays: 7,
-    metricNamespace: "PRPilot",
-    maxDimensionsPerMetric: 3,
-    paidProductRequired: false,
-    cardinalityRule: "Use lane, scanner, status, budgetMode, and pack dimensions only; keep repository, PR, SHA, and delivery IDs in logs."
-} as const;
-
-export const observabilityAlarmThresholds: ObservabilityAlarmThreshold[] = [
-    {
-        name: "error_count",
-        threshold: ">= 1 error in 5 minutes",
-        action: "Inspect structured logs for delivery ID, repository, PR number, lane, head SHA, and run status."
-    },
-    {
-        name: "throttle_count",
-        threshold: ">= 1 throttle in 5 minutes",
-        action: "Keep worker concurrency low, deny optional deep scans, and inspect queue age."
-    },
-    {
-        name: "queue_depth",
-        threshold: "DLQ >= 1 or oldest visible review job >= 300 seconds",
-        action: "Inspect the DLQ, replay only current-head jobs, and prioritize fast-lane work."
-    },
-    {
-        name: "latency_p95",
-        threshold: "p95 webhook-to-check latency > 120 seconds",
-        action: "Check queue backlog, scanner runtime, GitHub publish latency, and runtime budget mode."
-    },
-    {
-        name: "budget_mode",
-        threshold: "budgetMode is conserve or emergency",
-        action: "Deny optional deep work first, then reduce presentation volume before touching required checks."
-    }
-] as const;
-
-export const cloudWatchLogsInsightsQuery = [
-    "fields @timestamp, message, deliveryId, repositoryFullName, prNumber, lane, headSha, runStatus, budgetMode",
-    "filter service = \"prpilot\"",
-    "sort @timestamp desc",
-    "limit 50"
-].join("\n");
 
 export function buildStructuredReviewLog(input: StructuredReviewLogInput): StructuredReviewLog {
     return {
@@ -274,7 +230,7 @@ export function validateMetricCardinality(metrics: MetricDatum[]): string[] {
 
     for (const metric of metrics) {
         const dimensionNames = Object.keys(metric.dimensions);
-        if (dimensionNames.length > freeTierObservabilityPlan.maxDimensionsPerMetric) {
+        if (dimensionNames.length > MAX_DIMENSIONS_PER_METRIC) {
             violations.push(`${metric.name}:too_many_dimensions`);
         }
 

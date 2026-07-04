@@ -51,98 +51,8 @@ export type SyntheticBurstResult = {
     remainingBacklog: ReturnType<InMemoryReviewQueue["getBacklogSnapshot"]>;
 };
 
-export type ReliabilityRunbookKey =
-    | "scanner_timeout"
-    | "scanner_failure"
-    | "oversized_run"
-    | "unsupported_repo"
-    | "quota_exhaustion"
-    | "partial_coverage"
-    | "github_failed_delivery";
-
-export type ReliabilityAlarm = {
-    name: string;
-    metric: string;
-    threshold: string;
-    action: string;
-};
-
-export type LicenseExecutionBoundary = {
-    licenseFamily: "AGPL" | "GPL";
-    defaultEnabled: false;
-    approvalRequired: true;
-    boundary: string;
-};
-
-export const budgetSheddingOrder = [
-    "deny_optional_deep_lane",
-    "reduce_presentation_volume",
-    "report_required_path_gaps_as_action_required"
-] as const;
-
-export const reliabilityAlarmPlan: ReliabilityAlarm[] = [
-    {
-        name: "DlqHasMessagesAlarm",
-        metric: "AWS/SQS ApproximateNumberOfMessagesVisible",
-        threshold: ">= 1 message for 5 minutes",
-        action: "Inspect the DLQ record and replay only after confirming the PR head SHA is current."
-    },
-    {
-        name: "WebhookFunctionErrorsAlarm",
-        metric: "AWS/Lambda Errors",
-        threshold: ">= 1 webhook error for 5 minutes",
-        action: "Check signature, selected-repository scope, Parameter Store access, and queue handoff."
-    },
-    {
-        name: "WorkerFunctionErrorsAlarm",
-        metric: "AWS/Lambda Errors",
-        threshold: ">= 1 worker error for 5 minutes",
-        action: "Check scanner failure coverage, queue retry count, and GitHub publishing logs."
-    },
-    {
-        name: "WorkerFunctionThrottlesAlarm",
-        metric: "AWS/Lambda Throttles",
-        threshold: ">= 1 throttle for 5 minutes",
-        action: "Confirm reserved concurrency is intentional and move runtime policy to conserve if backlog grows."
-    },
-    {
-        name: "ReviewQueueAgeAlarm",
-        metric: "AWS/SQS ApproximateAgeOfOldestMessage",
-        threshold: ">= 300 seconds",
-        action: "Prioritize fast-lane backlog, deny optional deep work, and inspect stuck worker attempts."
-    },
-    {
-        name: "BudgetModeTransitionAlarm",
-        metric: "Deployment-owner budget or quota signal",
-        threshold: ">= 80% conserve, >= 100% emergency",
-        action: "Use runtime policy to deny deep scans first, then reduce presentation volume."
-    }
-] as const;
-
-export const reliabilityRunbookSteps: Record<ReliabilityRunbookKey, string> = {
-    scanner_timeout: "Publish honest timeout coverage; fast lane becomes action_required and deep lane stays advisory.",
-    scanner_failure: "Publish failed coverage, keep the raw scanner error out of annotations, and inspect worker logs.",
-    oversized_run: "Stop expensive work and publish the oversized-run outcome with the configured changed-file cap.",
-    unsupported_repo: "Publish unsupported-repo coverage and do not spend scanner runtime.",
-    quota_exhaustion: "Deny optional work first, then report required-path gaps honestly if the fast lane cannot run.",
-    partial_coverage: "Separate completed scope from missing scope and publish action_required only for required-path gaps.",
-    github_failed_delivery: "Use GitHub failed-delivery redelivery after verifying webhook secret and endpoint health."
-};
-
-export const cautiousLicenseBoundaries: LicenseExecutionBoundary[] = [
-    {
-        licenseFamily: "AGPL",
-        defaultEnabled: false,
-        approvalRequired: true,
-        boundary: "Do not link, import, vendor, or modify AGPL code in the PRPilot runtime; require owner approval and isolated process execution before any optional use."
-    },
-    {
-        licenseFamily: "GPL",
-        defaultEnabled: false,
-        approvalRequired: true,
-        boundary: "Do not link, import, vendor, or modify GPL code in the PRPilot runtime; require owner approval and isolated process execution before any optional use."
-    }
-] as const;
+// Alarm plan, runbook steps, and license boundaries live in
+// docs/operations-runbook.md — they are operator prose, not runtime data.
 
 export function buildBoundedRetryPolicy(input: RetryPolicyInput): ReviewQueueRetryPolicy {
     const scannerTimeoutMs = Math.max(1, Math.floor(input.scannerTimeoutMsCap));
@@ -241,10 +151,6 @@ export function decideBudgetShedding(mode: BudgetMode, lane: Lane): BudgetSheddi
         requiredPathCoverageBehavior: "action_required_if_gap",
         reason: "emergency_required_only"
     };
-}
-
-export function mapReliabilityOutcomeToRunbookStep(key: ReliabilityRunbookKey): string {
-    return reliabilityRunbookSteps[key];
 }
 
 export async function simulateSyntheticBurst(input: SyntheticBurstInput): Promise<SyntheticBurstResult> {

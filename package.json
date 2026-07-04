@@ -25,7 +25,6 @@
   "devDependencies": {
     "@types/node": "^25.6.0",
     "eslint": "^10.2.0",
-    "likit-codex": "^1.0.4",
     "typescript": "^6.0.2",
     "vitest": "^4.0.13"
   },

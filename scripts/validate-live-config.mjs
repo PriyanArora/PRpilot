@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 const requiredLiveEnvKeys = [
   "AWS_REGION",
   "GITHUB_APP_ID",
@@ -8,7 +10,7 @@ const requiredLiveEnvKeys = [
   "SQS_QUEUE_URL"
 ];
 
-function validateLiveConfig(env) {
+export function validateLiveConfig(env) {
   const errors = [];
   const warnings = [];
 
@@ -48,6 +50,9 @@ function validateLiveConfig(env) {
   };
 }
 
-const report = validateLiveConfig(process.env);
-console.log(JSON.stringify(report, null, 2));
-process.exit(report.ok ? 0 : 1);
+// Run only when executed directly (npm run deploy:validate-config), not on import.
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const report = validateLiveConfig(process.env);
+  console.log(JSON.stringify(report, null, 2));
+  process.exit(report.ok ? 0 : 1);
+}

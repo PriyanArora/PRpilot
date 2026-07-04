@@ -4,13 +4,10 @@ import type { Finding } from "../../packages/rules/finding";
 import {
     buildStructuredReviewLog,
     calculateLatencyStats,
-    cloudWatchLogsInsightsQuery,
     collectLaneMetrics,
     collectPackBudgetMetrics,
     collectScannerMetrics,
     compareLatencySamples,
-    freeTierObservabilityPlan,
-    observabilityAlarmThresholds,
     serializeStructuredReviewLog,
     validateMetricCardinality
 } from "../../packages/observability/free-tier-observability";
@@ -217,26 +214,5 @@ describe("P14 low-cardinality metrics", () => {
             "bad_metric:too_many_dimensions",
             "bad_metric:forbidden_dimension:headSha"
         ]);
-    });
-});
-
-describe("P14 alarms and free-tier plan", () => {
-    it("defines thresholds, actions, log query, and free-tier retention", () => {
-        expect(observabilityAlarmThresholds.map((alarm) => alarm.name)).toEqual([
-            "error_count",
-            "throttle_count",
-            "queue_depth",
-            "latency_p95",
-            "budget_mode"
-        ]);
-        expect(observabilityAlarmThresholds[3].action).toContain("queue backlog");
-        expect(freeTierObservabilityPlan).toMatchObject({
-            logRetentionDays: 7,
-            metricNamespace: "PRPilot",
-            maxDimensionsPerMetric: 3,
-            paidProductRequired: false
-        });
-        expect(cloudWatchLogsInsightsQuery).toContain("deliveryId");
-        expect(cloudWatchLogsInsightsQuery).toContain("budgetMode");
     });
 });
