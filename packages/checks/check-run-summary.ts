@@ -2,6 +2,7 @@ import type { Coverage } from "../rules/coverage";
 import type { Finding } from "../rules/finding";
 import type { CheckRunPayloadInput } from "../rules/check-run-payload-input";
 import type { CheckRunAnnotation } from "./check-run-annotations";
+import { formatFindingDelta, type FindingDelta } from "./finding-delta";
 
 // GitHub check-run summaries accept up to 65535 characters. Stay just under it and
 // leave room for the truncation notice.
@@ -13,6 +14,8 @@ export type CheckRunSummaryInput = {
     overflowAnnotations: CheckRunAnnotation[];
     appliedLimits: string[];
     deepScanAvailable: boolean;
+    // Present when a previous run exists for this PR/lane on an earlier head SHA.
+    delta?: FindingDelta;
 };
 
 export type CheckRunSummary = {
@@ -107,6 +110,7 @@ export function buildCheckRunSummary(input: CheckRunSummaryInput): CheckRunSumma
     const body = enforceLengthLimit([
         `### Verdict: ${input.payload.conclusion}`,
         "",
+        ...(input.delta === undefined ? [] : [formatFindingDelta(input.delta), ""]),
         ...buildFindingSection("Blocking findings", blockingFindings),
         ...buildFindingSection("Advisory findings", advisoryFindings),
         ...buildCoverageTable(coverageGaps),
