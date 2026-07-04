@@ -40,9 +40,9 @@ describe("internal.large-change", () => {
             path: "src/big-file.ts",
             severity: "medium",
             blockability: "warn",
-            message: "Large file change: 201 changed lines"
+            message: "Large file change: 201 changed lines (threshold 200)"
         });
-          
+
         expect(result.findings[0]?.fingerprint).toBe("internal.large-change:src/big-file.ts");
         expectCompletedInternalCoverage(result.coverage);
     });
@@ -60,6 +60,25 @@ describe("internal.large-change", () => {
         const result = evaluateLargeChange(changedFiles);
 
         expect(result.findings).toHaveLength(0);
+    });
+
+    it("flags a PR whose total size exceeds the threshold even when no single file does", () => {
+        const changedFiles: ChangedFile[] = Array.from({ length: 5 }, (_, index) => ({
+            path: `src/file-${index}.ts`,
+            status: "modified" as const,
+            additions: 150,
+            deletions: 50
+        }));
+
+        const result = evaluateLargeChange(changedFiles);
+
+        expect(result.findings).toHaveLength(1);
+        expect(result.findings[0]).toMatchObject({
+            rule_id: "internal.large-change",
+            path: ".",
+            fingerprint: "internal.large-change:total",
+            message: "Large PR: 1000 changed lines across 5 files (threshold 800) — consider splitting it"
+        });
     });
 });
 
@@ -86,10 +105,45 @@ describe("internal.sensitive-file-change", () => {
             path: ".github/workflows/deploy.yml",
             severity: "medium",
             blockability: "block",
-            message: "A sensitive file changed"
+            message: "Sensitive file changed (CI workflow)"
         });
         expect(result.findings[0]?.fingerprint).toBe("internal.sensitive-file-change:.github/workflows/deploy.yml");
         expectCompletedInternalCoverage(result.coverage);
+    });
+
+    it("flags live env files and private keys as high severity", () => {
+        const changedFiles: ChangedFile[] = [
+            { path: "config/.env.production", status: "added", additions: 5, deletions: 0 },
+            { path: "deploy/server.pem", status: "added", additions: 20, deletions: 0 },
+            { path: ".env.example", status: "modified", additions: 1, deletions: 0 }
+        ];
+
+        const result = evaluateSensitiveFileChange(changedFiles);
+
+        expect(result.findings).toHaveLength(3);
+        expect(result.findings[0]).toMatchObject({
+            severity: "high",
+            message: "Sensitive file changed (environment file)"
+        });
+        expect(result.findings[1]).toMatchObject({
+            severity: "high",
+            message: "Sensitive file changed (private key material)"
+        });
+        expect(result.findings[2]).toMatchObject({
+            severity: "medium",
+            message: "Sensitive file changed (environment file template)"
+        });
+    });
+
+    it("flags a rename away from a sensitive path", () => {
+        const changedFiles: ChangedFile[] = [
+            { path: "docs/notes.md", status: "renamed", additions: 0, deletions: 0, previousPath: ".env" }
+        ];
+
+        const result = evaluateSensitiveFileChange(changedFiles);
+
+        expect(result.findings).toHaveLength(1);
+        expect(result.findings[0]?.severity).toBe("high");
     });
 });
 
@@ -116,9 +170,34 @@ describe("internal.lockfile-drift", () => {
             path: "package.json",
             severity: "medium",
             blockability: "block",
-            message: "A lockfile drifted"
+            message: "package.json changed but no lockfile was updated — reinstall and commit the lockfile"
         });
         expect(result.findings[0]?.fingerprint).toBe("internal.lockfile-drift:package.json");
         expectCompletedInternalCoverage(result.coverage);
+    });
+
+    it("accepts any supported lockfile as satisfying the manifest change", () => {
+        const changedFiles: ChangedFile[] = [
+            { path: "package.json", status: "modified", additions: 2, deletions: 1 },
+            { path: "pnpm-lock.yaml", status: "modified", additions: 40, deletions: 12 }
+        ];
+
+        expect(evaluateLockfileDrift(changedFiles).findings).toHaveLength(0);
+    });
+
+    it("warns when a lockfile changes without package.json", () => {
+        const changedFiles: ChangedFile[] = [
+            { path: "yarn.lock", status: "modified", additions: 30, deletions: 5 }
+        ];
+
+        const result = evaluateLockfileDrift(changedFiles);
+
+        expect(result.findings).toHaveLength(1);
+        expect(result.findings[0]).toMatchObject({
+            rule_id: "internal.lockfile-drift",
+            blockability: "warn",
+            path: "yarn.lock",
+            message: "yarn.lock changed without package.json — verify the dependency change is intentional"
+        });
     });
 });

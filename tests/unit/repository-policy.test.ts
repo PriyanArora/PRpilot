@@ -120,7 +120,7 @@ describe("repository policy resolution", () => {
         ], { thresholdLines: 10 });
 
         expect(result.findings).toHaveLength(1);
-        expect(result.findings[0]?.message).toBe("Large file change: 15 changed lines");
+        expect(result.findings[0]?.message).toBe("Large file change: 15 changed lines (threshold 10)");
     });
 
     it("applies scanner controls, warn-first rollout, and automatic deep opt-in", () => {
